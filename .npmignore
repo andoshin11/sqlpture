@@ -1,1 +1,4 @@
-playground.ts
+src
+node_modules
+tsconfig.json
+test
