@@ -27,6 +27,19 @@ yarn add -D sqlpture
 
 3. Install [sqlpture](https://github.com/andoshin11/sqlpture)
 
+## How to use in Real World ?
+
+Check out the example repository!
+
+https://github.com/andoshin11/sqlpture-example
+
+There you can see...
+
+- How I manage PostgreSQL DB
+- How I do codegen TypeScript schema from actual DB
+- How I call PostgreSQL query on Node.js application
+- How I develop a type-safe Node.js API server
+
 ## TODO
 - [ ] Query Result Type
   - [ ] Querying Data
