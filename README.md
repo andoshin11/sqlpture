@@ -1,10 +1,31 @@
 # sqlpture
 
-sqlpture (ˈskʌlptʃə/) is a type-level SQL parser & validator, inspired by [ts-sql](https://github.com/codemix/ts-sql).
+**sqlpture** (`/ˈskʌlptʃə/`) is a type-level SQL parser & validator, inspired by [ts-sql](https://github.com/codemix/ts-sql).
 
-This is a SQL database implemented purely in TypeScript type annotations.  
-This means that it operates solely on types - you define a "database"
-(just a type annotation) and then query it using some more type annotations.
+```typescript
+import { Query } from 'sqlpture'
+import { DB } from './types/DB'
+
+const query = 'SELECT name, email, age FROM customer;'
+type result = Query<typeof query, DB> // Array<{ name: string, email: string | null, age: number }>
+```
+
+## Installation
+
+```sh
+yarn add -D sqlpture
+```
+
+## Getting Started
+**:warning: You will need TypeScript 4.1 or higher**
+
+1. Setup Database
+
+2. Generate Type Definition for Your Relational Database
+  - Reccomend to use [schemats](https://github.com/SweetIQ/schemats) to generate Table type intefaces for MySQL & Postgres
+  - Your DB type definition should meet such structure, `type Database = { dialect: string; schema: Record<string, any> }`
+
+3. Install [sqlpture](https://github.com/andoshin11/sqlpture)
 
 ## TODO
 - [ ] Query Result Type
@@ -29,34 +50,6 @@ This means that it operates solely on types - you define a "database"
       - [ ] accepts `number | null` only
       - [ ] `OFFSET` clause
     - [ ] `FETCH` clause
-
-It supports a subset of SQL, including SELECT (with conditions and joins), INSERT, UPDATE and DELETE statements.
-
-# [See the live demo]()
-
-You can install ts-sql in your own project with `npm install @codemix/ts-sql` or
-`yarn add @codemix/ts-sql` (TypeScript 4.1 is required).
-
-An example query looks like this:
-
-```typescript
-import { Query } from "sqlpture";
-
-const db = {
-  things: [
-    { id: 1, name: "a", active: true },
-    { id: 2, name: "b", active: false },
-    { id: 3, name: "c", active: true },
-  ],
-} as const;
-
-type ActiveThings = Query<
-  "SELECT id, name AS nom FROM things WHERE active = true",
-  typeof db
->;
-
-// ActiveThings is now equal to the following type:
-type Expected = [{ id: 1; nom: "a" }, { id: 3; nom: "c" }];
-```
-
-[See the full demo on the TypeScript playground!]()
+  - [ ] `INSERT`
+  - [ ] `UPDATE`
+  - [ ] `DELETE`
