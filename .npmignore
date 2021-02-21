@@ -2,3 +2,4 @@ src
 node_modules
 tsconfig.json
 test
+./index.d.ts

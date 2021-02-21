@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "SQL database engine implemented purely in TypeScript type definitions.",
   "main": "lib/index.js",
-  "types": "index.d.ts",
+  "types": "lib/index.d.ts",
   "author": "Shin Ando <shinglish11@gmail.com>",
   "license": "MIT",
   "keywords": [
