@@ -1,6 +1,6 @@
 {
   "name": "sqlpture",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "SQL database engine implemented purely in TypeScript type definitions.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
