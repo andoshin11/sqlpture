@@ -1,4 +1,4 @@
 export type Database = {
-  dialect: 'postgres'
-  schema: Record<string, any>
-}
+  dialect: "postgres";
+  schema: Record<string, any>;
+};

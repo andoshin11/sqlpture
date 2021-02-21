@@ -28,11 +28,12 @@
     "build": "tsc",
     "test:unit": "tsd",
     "test:type": "tsc --noEmit",
+    "format": "prettier src --write",
     "prepare": "yarn run build"
   },
   "dependencies": {},
   "devDependencies": {
-    "prettier": "^2.1.2",
+    "prettier": "^2.2.1",
     "tsd": "^0.14.0",
     "typescript": "4.1.3"
   },

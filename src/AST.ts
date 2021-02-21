@@ -113,7 +113,7 @@ export type SelectStatement<
   joins: Joins | [];
   where: Where;
   limit: Limit;
-  offset: Offset
+  offset: Offset;
 };
 
 export type InsertStatement<

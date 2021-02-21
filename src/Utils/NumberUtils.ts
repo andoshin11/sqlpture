@@ -262,6 +262,8 @@ type NextIntegers = Integers extends [number, ...infer Next] ? Next : never;
 
 export type Inc<T> = T extends keyof NextIntegers ? NextIntegers[T] : never;
 
-export type IntegerStrings = {[K in keyof Integers  & string as `${K}`]: Integers[K]};
+export type IntegerStrings = {
+  [K in keyof Integers & string as `${K}`]: Integers[K];
+};
 
 export type StringToNumber<T extends keyof IntegerStrings> = IntegerStrings[T];
