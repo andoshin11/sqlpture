@@ -1,21 +1,30 @@
 {
-  "name": "@codemix/ts-sql",
-  "version": "1.0.0",
+  "name": "sqlpture",
+  "version": "0.0.1",
   "description": "SQL database engine implemented purely in TypeScript type definitions.",
   "main": "lib/index.js",
-  "author": "Charles Pick <charles@codemix.com>",
+  "author": "Shin Ando <shinglish11@gmail.com>",
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
     "prettier": "^2.1.2",
-    "typescript": "beta"
+    "tsd": "^0.14.0",
+    "typescript": "4.1.3"
+  },
+  "peerDependencies": {
+    "typescript": "^4.1.3"
   },
   "scripts": {
     "build": "tsc -b",
-    "playground": "node scripts/bundle.js > scripts/playground.ts"
+    "playground": "node scripts/bundle.js > scripts/playground.ts",
+    "test:unit": "tsd",
+    "test:type": "tsc --noEmit"
   },
   "directories": {
     "lib": "lib"
+  },
+  "tsd": {
+    "directory": "test"
   },
   "repository": {
     "type": "git",

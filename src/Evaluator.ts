@@ -22,26 +22,34 @@ import { Database } from "./Schema";
 import { MatchStringLike, Merge } from "./Utils";
 
 type EvaluateStatement<
-  DB extends Database<any>,
+  DB extends Database,
   Node extends Statement
 > = Node extends SelectStatement
   ? EvaluateSelectStatement<DB, Node>
-  : Node extends InsertStatement
-  ? EvaluateInsertStatement<DB, Node>
-  : Node extends UpdateStatement
-  ? EvaluateUpdateStatement<DB, Node>
-  : Node extends DeleteStatement
-  ? EvaluateDeleteStatement<DB, Node>
   : never;
 
+// TBD
+// type EvaluateStatement<
+//   DB extends Database,
+//   Node extends Statement
+// > = Node extends SelectStatement
+//   ? EvaluateSelectStatement<DB, Node>
+//   : Node extends InsertStatement
+//   ? EvaluateInsertStatement<DB, Node>
+//   : Node extends UpdateStatement
+//   ? EvaluateUpdateStatement<DB, Node>
+//   : Node extends DeleteStatement
+//   ? EvaluateDeleteStatement<DB, Node>
+//   : never;
+
 type EvaluateInsertStatement<
-  DB extends Database<any>,
+  DB extends Database,
   Node extends InsertStatement
 > = Node extends InsertStatement<infer TableName, infer Assignments>
   ? {
       [K in keyof DB]: K extends TableName
         ? InsertRow<
-            TableName extends keyof DB ? DB[TableName] : never,
+            TableName extends keyof DB['schema'] ? DB['schema'][TableName] : never,
             Assignments
           >
         : DB[K];
@@ -63,7 +71,7 @@ type InsertRow<
 type AllReadonly<T> = { readonly [K in keyof T]: T[K] };
 
 type EvaluateUpdateStatement<
-  DB extends Database<any>,
+  DB extends Database,
   Node extends UpdateStatement
 > = Node extends UpdateStatement<
   infer TableName,
@@ -123,7 +131,7 @@ type ExtractValue<T> = T extends NullLiteral
   : never;
 
 type EvaluateDeleteStatement<
-  DB extends Database<any>,
+  DB extends Database,
   Node extends DeleteStatement
 > = Node extends DeleteStatement<infer TableName, infer Where>
   ? {
@@ -141,33 +149,29 @@ type DeleteRows<Table, Where> = FilterUndefined<
   }
 >;
 
-
 export type EvaluateSelectStatement<
-  DB extends Database<any>,
+  DB extends Database,
   Node extends SelectStatement
 > = Node extends SelectStatement<
   infer Fields,
   infer From,
-  infer Joins,
-  infer Where,
-  infer Offset,
-  infer Limit
+  infer Joins
 >
 ? From extends TableSpecifier<
     Identifier<infer Source>,
     Identifier<infer Alias>
   >
-  ? Source extends keyof DB
+  ? Source extends keyof DB['schema']
     ? Fields extends [FieldSpecifier<Identifier<"*">, Identifier<"*">>]
-      ? FilterWhere<CollectInputRows<DB, From, Joins>, Where>
+      ? CollectAllInputRows<DB, From, Joins>
       : AssembleRows<
           Fields,
           ExtractFields<
-            FilterWhere<CollectInputRows<DB, From, Joins>, Where>,
+            CollectInputRows<DB, From, Joins>,
             Fields,
             Merge<
               UnionToIntersection<
-                AssembleEntries<[[Alias & string, DB[Source]]]>
+                AssembleEntries<[[Alias & string, DB['schema'][Source]]]>
               >
             >
           >
@@ -176,96 +180,75 @@ export type EvaluateSelectStatement<
   : never
 : never;
 
-type CollectInputRows<
-  DB extends Database<any>,
+export type CollectAllInputRows<
+  DB extends Database,
+  From extends TableSpecifier,
+  Joins extends JoinSpecifier[]
+> = From extends TableSpecifier<
+Identifier<infer Source>,
+Identifier<infer Alias>
+>
+? Source extends keyof DB['schema']
+  ? Joins extends JoinSpecifier[]
+    ? Array<CollectRowJoins<DB, DB['schema'][Source], Alias, Joins>>
+    : Array<DB['schema'][Source]>
+  : never
+: never;
+
+export type CollectInputRows<
+  DB extends Database,
   From,
   Joins
 > = From extends TableSpecifier<
   Identifier<infer Source>,
   Identifier<infer Alias>
 >
-  ? Source extends keyof DB
+  ? Source extends keyof DB['schema']
     ? Joins extends JoinSpecifier[]
-      ? CollectJoins<DB, DB[Source], Alias, Joins>
-      : DB[Source]
+      ? CollectRowJoins<DB, DB['schema'][Source], Alias, Joins>
+      : DB['schema'][Source]
     : never
   : never;
 
-type CollectJoins<
-  DB extends Database<any>,
-  Table extends readonly any[],
-  Alias extends string,
-  Joins extends JoinSpecifier[]
-> =
-  {[K in keyof Table]: CollectRowJoins<DB, Table[K], Alias, Joins>};
-
-type CollectRowJoins<DB extends Database<any>, Row, Alias extends string, Joins extends JoinSpecifier[]> =
+type CollectRowJoins<DB extends Database, Row, Alias extends string, Joins extends JoinSpecifier[]> =
   Merge<Row & {
     readonly [K in keyof Joins as ExtractJoinAlias<Joins[K]>]: 
-      Joins[K] extends InnerJoinSpecifier<TableSpecifier<Identifier<infer JoinSource>, Identifier<infer JoinAlias>>, infer Where>
-        ? JoinSource extends keyof DB
-          ? FirstElementOrNull<
-              ExtractFieldByName<
-                FilterWhere<
-                  CollectJoinedArrayForRow<
-                    DB[JoinSource],
-                    ExtractJoinAlias<Joins[K]>,
-                    Row,
-                    Alias
-                  >,
-                  Where
-                >,
-                JoinAlias
-              >
-            >
+      Joins[K] extends InnerJoinSpecifier<TableSpecifier<Identifier<infer JoinSource>, Identifier<infer JoinAlias>>>
+        ? JoinSource extends keyof DB['schema']
+          ? DB['schema'][JoinSource]
           : never
         : never
   }>
 
-
-
-type CollectJoinedArrayForRow<JoinTable extends readonly any[], JoinAlias extends string, TableRow, TableAlias extends string> =
-  {[P in keyof JoinTable]: 
-    Merge<
+export type CollectJoinedArrayForRow<JoinTable, JoinAlias extends string, TableRow, TableAlias extends string> = Merge<
       TableRow
-      & {[JA in JoinAlias]: JoinTable[P]}
+      & {[JA in JoinAlias]: JoinTable}
       & {[TA in TableAlias]: TableRow}
-    >
-  };
+    >;
 
 type ExtractFieldByName<Table, FieldName> = 
   {[K in keyof Table]: FieldName extends keyof Table[K] ? Table[K][FieldName] : never };
 
-type FirstElementOrNull<Table> =
+export type FirstElementOrNull<Table> =
   Table extends readonly any[]
     ? Table['length'] extends 0
       ? null
       : Table[0]
     : null;
 
-type ExtractJoinAlias<Join> = Join extends InnerJoinSpecifier<TableSpecifier<Identifier<any>, Identifier<infer Alias>>> ? Alias : never;
+export type ExtractJoinAlias<Join> = Join extends InnerJoinSpecifier<TableSpecifier<Identifier<any>, Identifier<infer Alias>>> ? Alias : never;
 
-type FilterUndefined<T> = T extends Readonly<[infer Head, ...infer Tail]>
+export type FilterUndefined<T> = T extends Readonly<[infer Head, ...infer Tail]>
   ? Head extends undefined
     ? FilterUndefined<Tail>
     : [Head, ...FilterUndefined<Tail>]
   : [];
 
-type FilterWhere<Table, Exp> = FilterUndefined<
-  {
-    [Index in keyof Table]: EvaluateExpression<Table[Index], Exp> extends true
-      ? Table[Index]
-      : undefined;
-  }
->;
-
-type ExtractFields<Table, Fields, Aliases> = {
-  [Index in keyof Table]: {
-    [K in keyof Fields]: Fields[K] extends FieldSpecifier<infer Source>
-      ? ReadRowField<Table[Index], Source, Aliases>
+export type ExtractFields<Table, Fields, Aliases> = {
+  [K in keyof Fields]: Fields[K] extends FieldSpecifier<infer Source>
+      ? ReadRowField<Table, Source, Aliases>
       : never;
   };
-};
 
 type GetValueByKey<Row, Key, Aliases> = 
   Row extends null ? GetValueByKey<Exclude<Row, null>, Key, Aliases> :
@@ -284,11 +267,11 @@ type ReadRowField<Row, Field, Aliases> = Field extends MemberExpression<
   ? GetValueByKey<Row, P, Aliases>
   : never;
 
-type AssembleRows<Fields, Data> = Fields extends FieldSpecifier<any>[]
-  ? { [Index in keyof Data]: AssembleRow<Fields, Data[Index]> }
+export type AssembleRows<Fields, Data> = Fields extends FieldSpecifier<any>[]
+  ? Array<AssembleRow<Fields, Data>>
   : never;
 
-type AssembleRow<Fields extends FieldSpecifier<any>[], Data> = Merge<
+export type AssembleRow<Fields extends FieldSpecifier<any>[], Data> = Merge<
   UnionToIntersection<
     AssembleEntries<
       {
@@ -396,38 +379,38 @@ type EvaluateIdentifier<Row, Exp> = Exp extends Identifier<infer Name>
     : never
   : never;
 
-type EvaluateNullLiteral<Row, Exp> = Exp extends NullLiteral ? null : never;
+export type EvaluateNullLiteral<Row, Exp> = Exp extends NullLiteral ? null : never;
 
-type EvaluateBooleanLiteral<Row, Exp> = Exp extends BooleanLiteral<infer Value>
+export type EvaluateBooleanLiteral<Row, Exp> = Exp extends BooleanLiteral<infer Value>
   ? Value
   : never;
 
-type EvaluateStringLiteral<Row, Exp> = Exp extends StringLiteral<infer Value>
+export type EvaluateStringLiteral<Row, Exp> = Exp extends StringLiteral<infer Value>
   ? Value
   : never;
 
-type EvaluateNumericLiteral<Row, Exp> = Exp extends NumericLiteral<infer Value>
+export type EvaluateNumericLiteral<Row, Exp> = Exp extends NumericLiteral<infer Value>
   ? Value
   : never;
 
 export type Evaluate<
-  DB extends Database<any>,
+  DB extends Database,
   S extends Statement
 > = EvaluateStatement<DB, S>;
 
-type PairToObject<P extends readonly [PropertyKey, any]> = P extends any
+export type PairToObject<P extends readonly [PropertyKey, any]> = P extends any
   ? {
       [k in P[0]]: P[1];
     }
   : never;
-type ToUnaryFunctionUnion<U> = U extends any ? (arg: U) => void : never;
-type UnionToIntersection<U> = ToUnaryFunctionUnion<U> extends (
+export type ToUnaryFunctionUnion<U> = U extends any ? (arg: U) => void : never;
+export type UnionToIntersection<U> = ToUnaryFunctionUnion<U> extends (
   arg: infer I
 ) => void
   ? I
   : never;
 
-type AssembleEntries<
+export type AssembleEntries<
   Entries extends Iterable<readonly [PropertyKey, any]>
 > = Entries extends Iterable<infer P>
   ? P extends readonly [PropertyKey, any]

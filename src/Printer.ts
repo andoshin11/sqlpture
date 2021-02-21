@@ -25,8 +25,8 @@ export type Print<T> =
       TableSpecifier<infer TableName, infer TableAlias>,
       infer Joins & any[],
       infer Where,
-      infer Offset,
-      infer Limit
+      infer Limit,
+      infer Offset
     > ?
       JoinStrings<
         [
@@ -38,8 +38,16 @@ export type Print<T> =
           Where extends BooleanLiteral<true>
             ? ''
             : `WHERE ${Print<Where>}`,
-          Limit extends -1 ? '' : `LIMIT ${Limit}`,
-          Offset extends 0 ? '' : `OFFSET ${Offset}`
+          Limit extends NumericLiteral<infer Value>
+            ? Value extends -1
+              ? ''
+              : `LIMIT ${Value}`
+            : never,
+          Offset extends NumericLiteral<infer Value>
+            ? Value extends 0
+              ? ''
+              : `OFFSET ${Value}`
+            : never
         ],
         ' '
       > :

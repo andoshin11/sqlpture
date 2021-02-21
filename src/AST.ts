@@ -104,16 +104,16 @@ export type SelectStatement<
   From extends TableSpecifier<any> = TableSpecifier<any>,
   Joins extends JoinSpecifier[] = JoinSpecifier[],
   Where extends Expression = Expression,
-  Offset extends number = number,
-  Limit extends number = number
+  Limit extends Expression = Expression,
+  Offset extends Expression = Expression
 > = {
   type: "SelectStatement";
   fields: Fields;
   from: From;
   joins: Joins | [];
   where: Where;
-  offset: Offset;
   limit: Limit;
+  offset: Offset
 };
 
 export type InsertStatement<

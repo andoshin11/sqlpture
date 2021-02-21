@@ -1,4 +1,4 @@
-export type Table<T> = ReadonlyArray<T>;
-export type Database<Schema> = {
-  [TableName in keyof Schema]: Table<Schema[TableName]>;
-};
+export type Database = {
+  dialect: 'postgres'
+  schema: Record<string, any>
+}
