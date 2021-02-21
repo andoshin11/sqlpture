@@ -96,7 +96,11 @@ export type ParseLimitClause<
             limit: NumericLiteral<number & IntegerStrings[Limit]>;
           } & ParseOffsetClause<R1>
         >
-      : never
+      : Merge<
+          {
+            limit: NumericLiteral<-1>;
+          } & ParseOffsetClause<R1>
+        >
     : never
   : Merge<{ limit: NumericLiteral<-1> } & ParseOffsetClause<T>>;
 
@@ -110,6 +114,6 @@ export type ParseOffsetClause<
         } & ParseStatementTerminator<R1>
       : Offset extends "NULL"
       ? { offset: NumericLiteral<0> } & ParseStatementTerminator<T>
-      : never
+      : { offset: NumericLiteral<0> } & ParseStatementTerminator<T>
     : never
   : { offset: NumericLiteral<0> } & ParseStatementTerminator<T>;

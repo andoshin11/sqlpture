@@ -113,3 +113,7 @@ expectType<T27>(V27)
 type T28 = Query<fixtures.Q28, fixtures.DB>
 const V28: T28 = [{ first_name: 'John', last_name: 'Smith', rental_date: new Date(), return_date: null, film_title: 'Avengers' }]
 expectType<T28>(V28)
+
+type T29 = Query<fixtures.Q29, fixtures.DB>
+const V29: T29 = [{ first_name: 'John' }]
+expectType<T29>(V29)

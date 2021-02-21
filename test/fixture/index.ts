@@ -90,3 +90,5 @@ export type Q26 = "SELECT first_name, last_name FROM customer WHERE first_name N
 export type Q27 = "SELECT customer.first_name, customer.last_name, rental.rental_date FROM rental INNER JOIN customer ON rental.customer_id = customer.customer_id;"
 
 export type Q28 = "SELECT customer.first_name, customer.last_name, rental.rental_date, rental.return_date, film.title film_title FROM rental INNER JOIN customer ON rental.customer_id = customer.customer_id INNER JOIN inventory ON rental.inventory_id = inventory.inventory_id INNER JOIN film ON inventory.film_id = film.film_id ORDER BY rental_date DESC LIMIT 10;"
+
+export type Q29 = 'SELECT first_name FROM customer LIMIT $1'

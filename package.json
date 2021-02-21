@@ -26,6 +26,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "watch": "tsc -w",
     "test:unit": "tsd",
     "test:type": "tsc --noEmit",
     "format": "prettier src --write",
