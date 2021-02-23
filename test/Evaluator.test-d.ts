@@ -5,18 +5,6 @@ import * as AST from '../src/AST'
 import { DB, query1, query2, query3, Q2, Q3 } from './fixture'
 import { Merge } from '../src/Utils'
 
-interface Person {
-  id: number
-  name: string
-  age: number
-}
-
-type Admin = {
-  name: string
-  isAdmin: true
-  title: string
-}
-
 type TExtractJoinAlias = Parser.Parse<query1> extends AST.SelectStatement<infer Fields, infer From, infer Join> ? Evaluate.ExtractJoinAlias<Join[0]> : never
 const VExtractJoinAlias: TExtractJoinAlias = 'team'
 expectType<TExtractJoinAlias>(VExtractJoinAlias)
@@ -76,35 +64,3 @@ type TEvaluateNumericLiteral = Evaluate.EvaluateNumericLiteral<any, AST.NumericL
 const VEvaluateNumericLiteral: TEvaluateNumericLiteral = 7
 expectType<TEvaluateNumericLiteral>(VEvaluateNumericLiteral)
 expectNotType<TEvaluateNumericLiteral>(9)
-
-/**
- * PairToObject
- */
-type TPairToObject = Evaluate.PairToObject<readonly ['hoge', 'fuga']>
-const VPairToObject: TPairToObject = {
-  hoge: 'fuga'
-}
-expectType<TPairToObject>(VPairToObject)
-
-/**
- * ToUnaryFunctionUnion
- */
-type TToUnaryFunctionUnion = Evaluate.ToUnaryFunctionUnion<Person>
-const VToUnaryFunctionUnion: TToUnaryFunctionUnion = (arg: Person) => {}
-expectType<TToUnaryFunctionUnion>(VToUnaryFunctionUnion)
-
-/**
- * UnionToIntersection
- */
-type TUnionToIntersection = Evaluate.UnionToIntersection<Person | Admin>
-const VUnionToIntersection: TUnionToIntersection = { id: 1, name: 'John', age: 28, isAdmin: true, title: 'CEO' }
-expectType<TUnionToIntersection>(VUnionToIntersection)
-
-/**
- * AssembleEntries
- */
-type TAssembleEntries = Evaluate.AssembleEntries<[['id', 1], ['name', 'John']]>
-const VAssembleEntries1: TAssembleEntries = { id: 1 }
-const VAssembleEntries2: TAssembleEntries = { name: 'John' }
-expectType<TAssembleEntries>(VAssembleEntries1)
-expectType<TAssembleEntries>(VAssembleEntries2)

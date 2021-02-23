@@ -19,7 +19,7 @@ import {
   UpdateStatement,
 } from "./AST";
 import { Database, JoinedSchema } from "./Schema";
-import { MatchStringLike, Merge, Joint, UnionizeValue } from "./Utils";
+import { MatchStringLike, Merge, Joint, UnionizeValue, UnionToIntersection, AssembleEntries } from "./Utils";
 
 type EvaluateStatement<
   DB extends Database,
@@ -165,7 +165,7 @@ export type EvaluateSelectStatement<
     : never
   : never;
 
-export type JoinsMap<DB extends Database, Joins extends JoinSpecifier[]> = Merge<UnionToIntersection<AssembleEntries<{
+export type JoinsMap<DB extends Database, Joins extends JoinSpecifier[]> = AssembleEntries<{
   [K in keyof Joins]: Joins[K] extends InnerJoinSpecifier<
     TableSpecifier<
       Identifier<infer JoinSource>,
@@ -176,7 +176,7 @@ export type JoinsMap<DB extends Database, Joins extends JoinSpecifier[]> = Merge
       ? [ExtractJoinAlias<Joins[K]>, DB["schema"][JoinSource]]
       : never
     : never;
-}>>>
+}>
 
 export type ToJoinedSchema<
   DB extends Database,
@@ -218,7 +218,7 @@ export type FilterUndefined<T> = T extends Readonly<[infer Head, ...infer Tail]>
 export type ExtractFields<
   Schema extends JoinedSchema<any>,
   Fields extends FieldSpecifier<any>[]
-> = Merge<UnionToIntersection<AssembleEntries<{
+> = AssembleEntries<{
   [K in keyof Fields]: Fields[K] extends FieldSpecifier<infer Source, Identifier<infer Alias>>
     ? Source extends Identifier<infer Name>
       ? Name extends keyof Schema['public']
@@ -236,7 +236,7 @@ export type ExtractFields<
             : never
         : never
     : never
-}>>>
+}>
 
 type EvaluateExpression<Row, Exp> =
   | EvaluateLogicalExpression<Row, Exp>
@@ -357,23 +357,3 @@ export type Evaluate<
   DB extends Database,
   S extends Statement
 > = EvaluateStatement<DB, S>;
-
-export type PairToObject<P extends readonly [PropertyKey, any]> = P extends any
-  ? {
-      [k in P[0]]: P[1];
-    }
-  : never;
-export type ToUnaryFunctionUnion<U> = U extends any ? (arg: U) => void : never;
-export type UnionToIntersection<U> = ToUnaryFunctionUnion<U> extends (
-  arg: infer I
-) => void
-  ? I
-  : never;
-
-export type AssembleEntries<
-  Entries extends Iterable<readonly [PropertyKey, any]>
-> = Entries extends Iterable<infer P>
-  ? P extends readonly [PropertyKey, any]
-    ? Merge<UnionToIntersection<PairToObject<P>>>
-    : never
-  : never;
