@@ -17,35 +17,6 @@ type Admin = {
   title: string
 }
 
-// type TCollectJoinedArrayForRow = Evaluate.CollectJoinedArrayForRow
-
-/**
- * CollectAllInputRows
- */
-type TCollectAllInputRows = Parser.Parse<Q3> extends AST.SelectStatement<infer Fields, infer From, infer Join>
-  ? Evaluate.CollectAllInputRows<DB, From, Join>
-  : never
-const VCollectAllInputRows: TCollectAllInputRows = [
-  {
-    customer_id: 1,
-    store_id: 100,
-    first_name: 'John',
-    last_name: 'Smith',
-    email: 'john.smith@example.com',
-    address_id: 10,
-    activebool: true,
-    create_date: new Date('2021-02-21'),
-    last_update: new Date('2021-02-21'),
-    active: null
-  }
-]
-expectType<TCollectAllInputRows>(VCollectAllInputRows)
-
-
-type TFirstElementOrNull = Evaluate.FirstElementOrNull<[{ id: 1 }, { id: 2 }]>
-const VFirstElementOrNull: TFirstElementOrNull = { id: 1 }
-expectType<TFirstElementOrNull>(VFirstElementOrNull)
-
 type TExtractJoinAlias = Parser.Parse<query1> extends AST.SelectStatement<infer Fields, infer From, infer Join> ? Evaluate.ExtractJoinAlias<Join[0]> : never
 const VExtractJoinAlias: TExtractJoinAlias = 'team'
 expectType<TExtractJoinAlias>(VExtractJoinAlias)
@@ -60,39 +31,19 @@ expectType<TFilterUndefined>(VFilterUndefined)
 /**
  * ExtractFields
  */
-type TExtractFields = Parser.Parse<Q2> extends AST.SelectStatement<infer Fields, infer From, infer Join>
-  ? From extends AST.TableSpecifier<AST.Identifier<infer Source>, AST.Identifier<infer Alias>>
-    ? Source extends keyof DB['schema']
-      ? Evaluate.ExtractFields<
-          Evaluate.CollectInputRows<DB, From, Join>,
-          Fields,
-          Merge<Evaluate.UnionToIntersection<Evaluate.AssembleEntries<[[Alias & string, DB['schema'][Source]]]>>>
-        >
-      : never
-    : never
-  : never
-const VExtractFields: TExtractFields = ['John', 'Smith', null]
-expectType<TExtractFields>(VExtractFields)
-
-/**
- * AssembleRows
- */
-type TAssembleRows = Parser.Parse<Q2> extends AST.SelectStatement<infer Fields, infer From, infer Join>
-? From extends AST.TableSpecifier<AST.Identifier<infer Source>, AST.Identifier<infer Alias>>
-  ? Source extends keyof DB['schema']
-    ? Evaluate.AssembleRows<
-        Fields,
-        Evaluate.ExtractFields<
-          Evaluate.CollectInputRows<DB, From, Join>,
-          Fields,
-          Merge<Evaluate.UnionToIntersection<Evaluate.AssembleEntries<[[Alias & string, DB['schema'][Source]]]>>>
-        >
-      >
-    : never
-  : never
-: never
-const VAssembleRows: TAssembleRows = [ { first_name: 'John', last_name: 'Smith', email: null }]
-expectType<TAssembleRows>(VAssembleRows)
+// type TExtractFields = Parser.Parse<Q2> extends AST.SelectStatement<infer Fields, infer From, infer Join>
+//   ? From extends AST.TableSpecifier<AST.Identifier<infer Source>, AST.Identifier<infer Alias>>
+//     ? Source extends keyof DB['schema']
+//       ? Evaluate.ExtractFields<
+//           Evaluate.CollectInputRows<DB, From, Join>,
+//           Fields,
+//           Merge<Evaluate.UnionToIntersection<Evaluate.AssembleEntries<[[Alias & string, DB['schema'][Source]]]>>>
+//         >
+//       : never
+//     : never
+//   : never
+// const VExtractFields: TExtractFields = ['John', 'Smith', null]
+// expectType<TExtractFields>(VExtractFields)
 
 /**
  * EvaluateNullLiteral
@@ -152,6 +103,8 @@ expectType<TUnionToIntersection>(VUnionToIntersection)
 /**
  * AssembleEntries
  */
-type TAssembleEntries = Evaluate.AssembleEntries<[['id', 1]]>
-const VAssembleEntries: TAssembleEntries = { id: 1 }
-expectType<TAssembleEntries>(VAssembleEntries)
+type TAssembleEntries = Evaluate.AssembleEntries<[['id', 1], ['name', 'John']]>
+const VAssembleEntries1: TAssembleEntries = { id: 1 }
+const VAssembleEntries2: TAssembleEntries = { name: 'John' }
+expectType<TAssembleEntries>(VAssembleEntries1)
+expectType<TAssembleEntries>(VAssembleEntries2)

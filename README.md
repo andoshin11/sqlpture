@@ -53,6 +53,10 @@ There you can see...
       - [x] `SELECT column_name AS alias_name FROM table_name`
       - [x] `SELECT column_name alias_name FROM table_name`
       - [ ] Column Aliases that contain spaces
+    - [x] Join Tables
+      - [x] INNER JOIN multiple tables
+      - [x] field name from public table
+      - [x] field name with table alias prefix
 - [ ] Query Validator
   - [ ] `SELECT`
     - [ ] Column Aliases that contain spaces
