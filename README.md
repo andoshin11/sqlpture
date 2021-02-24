@@ -10,6 +10,8 @@ const query = 'SELECT name, email, age FROM customer;'
 type result = Query<typeof query, DB> // Array<{ name: string, email: string | null, age: number }>
 ```
 
+https://user-images.githubusercontent.com/8381075/108981773-6a157b80-76d0-11eb-91d0-d09af250e08a.mp4
+
 ## Installation
 
 ```sh
