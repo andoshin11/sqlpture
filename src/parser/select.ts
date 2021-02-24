@@ -7,6 +7,7 @@ import {
   TableSpecifier,
   Identifier,
   SelectStatement,
+  NullLiteral,
 } from "../AST";
 import {
   ParseStatementTerminator,
@@ -96,7 +97,13 @@ export type ParseLimitClause<
             limit: NumericLiteral<number & IntegerStrings[Limit]>;
           } & ParseOffsetClause<R1>
         >
-      : Merge<
+      : Limit extends "NULL"
+        ? Merge<
+          {
+            limit: NumericLiteral<-1>;
+          } & ParseOffsetClause<R1>
+        >
+        : Merge<
           {
             limit: NumericLiteral<-1>;
           } & ParseOffsetClause<R1>

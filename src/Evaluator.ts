@@ -19,7 +19,7 @@ import {
   UpdateStatement,
 } from "./AST";
 import { Database, JoinedSchema } from "./Schema";
-import { MatchStringLike, Merge, Joint, UnionizeValue, UnionToIntersection, AssembleEntries } from "./Utils";
+import { MatchStringLike, Merge, Joint, UnionizeValue, UnionToIntersection, AssembleEntries, ExtractJoinAlias } from "./Utils";
 
 type EvaluateStatement<
   DB extends Database,
@@ -198,12 +198,6 @@ Identifier<infer Alias>
       }
     : never
   : never
-
-export type ExtractJoinAlias<Join> = Join extends InnerJoinSpecifier<
-  TableSpecifier<Identifier<any>, Identifier<infer Alias>>
->
-  ? Alias
-  : never;
 
 export type ExtractFieldAlias<Field> = Field extends FieldSpecifier<Identifier<any>, Identifier<infer Alias>>
  ? Alias

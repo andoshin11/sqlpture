@@ -110,7 +110,7 @@ export type SelectStatement<
   type: "SelectStatement";
   fields: Fields;
   from: From;
-  joins: Joins | [];
+  joins: Joins;
   where: Where;
   limit: Limit;
   offset: Offset;

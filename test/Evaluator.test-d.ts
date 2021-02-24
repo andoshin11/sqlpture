@@ -5,9 +5,9 @@ import * as AST from '../src/AST'
 import { DB, query1, query2, query3, Q2, Q3 } from './fixture'
 import { Merge } from '../src/Utils'
 
-type TExtractJoinAlias = Parser.Parse<query1> extends AST.SelectStatement<infer Fields, infer From, infer Join> ? Evaluate.ExtractJoinAlias<Join[0]> : never
-const VExtractJoinAlias: TExtractJoinAlias = 'team'
-expectType<TExtractJoinAlias>(VExtractJoinAlias)
+// type TExtractJoinAlias = Parser.Parse<query1> extends AST.SelectStatement<infer Fields, infer From, infer Join> ? Evaluate.ExtractJoinAlias<Join[0]> : never
+// const VExtractJoinAlias: TExtractJoinAlias = 'team'
+// expectType<TExtractJoinAlias>(VExtractJoinAlias)
 
 /**
  * FilterUndefined

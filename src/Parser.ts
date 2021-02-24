@@ -18,8 +18,6 @@ import {
 import { IntegerStrings, Trim } from "./Utils";
 import { ParseSelectStatement } from "./parser/select";
 
-export type EatSemicolon<T> = T extends `${infer Statement};` ? Statement : T;
-
 export type Parse<T> = ParseStatement<T> extends [infer Statement, infer Rest]
   ? Trim<Rest> extends ";"
     ? Statement
@@ -29,7 +27,7 @@ export type Parse<T> = ParseStatement<T> extends [infer Statement, infer Rest]
   : never;
 
 type ParseStatement<T> =
-  | ParseSelectStatement<EatSemicolon<T>>
+  | ParseSelectStatement<T>
   | ParseInsertStatement<T>
   | ParseUpdateStatement<T>
   | ParseDeleteStatement<T>;

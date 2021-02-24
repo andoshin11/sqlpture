@@ -63,7 +63,7 @@ export type Q13 = "SELECT last_name, first_name FROM customer WHERE first_name =
 
 export type Q14 = "SELECT last_name, first_name FROM customer WHERE first_name IN ('Ann','Anne','Annie');"
 
-export type Q15 = 'SELECT film_id, title, release_year FROM film ORDER BY film_id LIMIT 4 OFFSET NULL;'
+export type Q15 = 'SELECT film_id, title, release_year FROM film ORDER BY film_id LIMIT NULL OFFSET NULL;'
 
 export type Q16 = 'SELECT film_id, title, release_year FROM film ORDER BY film_id LIMIT 4 OFFSET 3;'
 
@@ -96,3 +96,11 @@ export type Q29 = 'SELECT first_name FROM customer LIMIT $1'
 export type Q30 = "SELECT first_name, c.last_name, rental.rental_date rented FROM rental INNER JOIN customer AS c ON rental.customer_id = customer.customer_id;"
 
 export type Q31 = "SELECT * FROM rental INNER JOIN customer ON rental.customer_id = customer.customer_id;"
+
+export type NQ1 = 'SELECT * FROM invalid;'
+
+export type NQ2 = "SELECT * FROM rental INNER JOIN customers ON rental.customer_id = customers.customer_id;"
+
+export type NQ3 = "SELECT customer.first_name, customer.last_name, rental.rental_date, rental.return_date, film.title film_title FROM rental INNER JOIN customer ON rental.customer_id = customer.customer_id INNER JOIN inventory ON rental.inventory_id = inventory.inventory_id INNER JOIN films ON inventory.film_id = films.film_id ORDER BY rental_date DESC LIMIT 10;"
+
+export type NQ4 = "SELECT last_name, first_name FROM customer WHERE first_names = 'Jamie';"

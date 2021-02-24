@@ -112,7 +112,7 @@ expectType<TParseWhereClauseForSelect1>(VParseWhereClauseForSelect1)
  * ParseLimitClause
  */
 type TParseLimitClause1 = select.ParseLimitClause<fixtures.Q15>
-const VParseLimitClause1: TParseLimitClause1 = { limit: { type: 'NumericLiteral', value: 4 }, offset: { type: 'NumericLiteral', value: 0 } }
+const VParseLimitClause1: TParseLimitClause1 = { limit: { type: 'NumericLiteral', value: -1 }, offset: { type: 'NumericLiteral', value: 0 } }
 expectType<TParseLimitClause1>(VParseLimitClause1)
 
 type TParseLimitClause2 = select.ParseLimitClause<fixtures.Q16>
