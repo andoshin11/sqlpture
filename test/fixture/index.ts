@@ -97,6 +97,8 @@ export type Q30 = "SELECT first_name, c.last_name, rental.rental_date rented FRO
 
 export type Q31 = "SELECT * FROM rental INNER JOIN customer ON rental.customer_id = customer.customer_id;"
 
+export type Q32 = "SELECT first_name, c.last_name surname, c.email FROM customer AS c;"
+
 export type NQ1 = 'SELECT * FROM invalid;'
 
 export type NQ2 = "SELECT * FROM rental INNER JOIN customers ON rental.customer_id = customers.customer_id;"
@@ -104,3 +106,13 @@ export type NQ2 = "SELECT * FROM rental INNER JOIN customers ON rental.customer_
 export type NQ3 = "SELECT customer.first_name, customer.last_name, rental.rental_date, rental.return_date, film.title film_title FROM rental INNER JOIN customer ON rental.customer_id = customer.customer_id INNER JOIN inventory ON rental.inventory_id = inventory.inventory_id INNER JOIN films ON inventory.film_id = films.film_id ORDER BY rental_date DESC LIMIT 10;"
 
 export type NQ4 = "SELECT last_name, first_name FROM customer WHERE first_names = 'Jamie';"
+
+export type NQ5 = "SELECT first_name, c.last_name surname, c.email FROM customers AS c;"
+
+export type NQ6 = "SELECT first_names, c.last_name, rental.rental_date rented FROM rental INNER JOIN customer AS c ON rental.customer_id = customer.customer_id;"
+
+export type NQ7 = "SELECT first_name, d.last_name, rental.rental_date rented FROM rental INNER JOIN customer AS c ON rental.customer_id = customer.customer_id;"
+
+export type NQ8 = "SELECT first_name, c.last_name, rentals.rental_date rented FROM rental INNER JOIN customer AS c ON rental.customer_id = customer.customer_id;"
+
+export type NQ9 = "SELECT first_name, c.last_name, rental.rental_dates rented FROM rental INNER JOIN customer AS c ON rental.customer_id = customer.customer_id;"

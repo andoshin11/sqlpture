@@ -1,5 +1,10 @@
 import { expectType } from 'tsd'
 import * as select from '../src/validator/select'
+import {
+  ValidateJoinClauses,
+  ValidateFromClause,
+  ValidateFieldList
+} from '../src/validator/select'
 import { Parse } from '../src/Parser'
 import * as fixtures from './fixture'
 
@@ -33,15 +38,26 @@ type TValidSelectStatementQ16 = ValidQuery<Parse<fixtures.Q16>>
 type T1 = Parse<fixtures.Q11>['where']
 
 /**
+ * ValidateFieldList
+ */
+expectType<ValidateFieldList<fixtures.DB, Parse<fixtures.Q30>>>(true)
+expectType<ValidateFieldList<fixtures.DB, Parse<fixtures.NQ6>>>(false)
+expectType<ValidateFieldList<fixtures.DB, Parse<fixtures.NQ7>>>(false)
+expectType<ValidateFieldList<fixtures.DB, Parse<fixtures.NQ8>>>(false)
+expectType<ValidateFieldList<fixtures.DB, Parse<fixtures.NQ9>>>(false)
+
+/**
  * ValidateFromClause
  */
-expectType<select.ValidateFromClause<fixtures.DB, Parse<fixtures.NQ1>>>(false)
-expectType<select.ValidateFromClause<fixtures.DB, Parse<fixtures.Q3>>>(true)
+expectType<ValidateFromClause<fixtures.DB, Parse<fixtures.Q3>>>(true)
+expectType<ValidateFromClause<fixtures.DB, Parse<fixtures.Q32>>>(true)
+expectType<ValidateFromClause<fixtures.DB, Parse<fixtures.NQ1>>>(false)
+expectType<ValidateFromClause<fixtures.DB, Parse<fixtures.NQ5>>>(false)
 
 /**
  * ValidateJoinClauses
  */
-expectType<select.ValidateJoinClauses<fixtures.DB, Parse<fixtures.Q27>>>(true)
-expectType<select.ValidateJoinClauses<fixtures.DB, Parse<fixtures.Q28>>>(true)
-expectType<select.ValidateJoinClauses<fixtures.DB, Parse<fixtures.NQ2>>>(false)
-expectType<select.ValidateJoinClauses<fixtures.DB, Parse<fixtures.NQ3>>>(false)
+expectType<ValidateJoinClauses<fixtures.DB, Parse<fixtures.Q27>>>(true)
+expectType<ValidateJoinClauses<fixtures.DB, Parse<fixtures.Q28>>>(true)
+expectType<ValidateJoinClauses<fixtures.DB, Parse<fixtures.NQ2>>>(false)
+expectType<ValidateJoinClauses<fixtures.DB, Parse<fixtures.NQ3>>>(false)

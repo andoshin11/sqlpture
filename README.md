@@ -61,14 +61,15 @@ There you can see...
       - [x] field name with table alias prefix
 - [ ] Query Validator
   - [ ] `SELECT`
-    - [ ] Column Aliases that contain spaces
+    - [x] Field names
+      - [x] Invalid filed names from public schema
+      - [x] Invalid field names with table alias prefix
+    - [ ] Join
+      - [ ] Invalid `ON` target fields
     - [ ] `ORDER BY` clause
-    - [ ] NULL check inside `ORDER BY` clause
+      - [ ] Invalid field names
     - [ ] `WHERE` clause
-    - [ ] `LIMIT` clause
-      - [ ] accepts `number | null` only
-      - [ ] `OFFSET` clause
-    - [ ] `FETCH` clause
+      - [ ] Invalid field names
   - [ ] `INSERT`
   - [ ] `UPDATE`
   - [ ] `DELETE`
