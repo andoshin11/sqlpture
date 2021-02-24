@@ -32,5 +32,3 @@ export type AssembleEntries<
     ? PairToObject<Entries[P]>
     : never
 }>>>
-
-export type PushItemToTuple<T, I> = T extends any[] ? [...T, I] : never

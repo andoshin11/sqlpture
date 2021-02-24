@@ -1,6 +1,6 @@
 import { InnerJoinSpecifier, TableSpecifier, Identifier, JoinSpecifier } from '../AST'
 import { Database } from '../Schema'
-import { UnionizeValue, PushItemToTuple, AssembleEntries, Joint, UnionToIntersection } from './ObjectUtils'
+import { UnionizeValue, AssembleEntries, Joint, UnionToIntersection } from './ObjectUtils'
 
 export type ExtractAllFieldNames<DB extends Database> = UnionizeValue<{ [K in keyof DB['schema']]: keyof DB['schema'][K] }>
 
@@ -13,12 +13,6 @@ TableSpecifier<Identifier<any>, Identifier<infer Alias>>
 export type ExtractJoinSource<Join> = Join extends InnerJoinSpecifier<TableSpecifier<Identifier<infer Source>, Identifier<any>>>
  ? Source
  : never
-
-export type AliasMap<From, Joins> = From extends TableSpecifier<Identifier<infer FromSource>, Identifier<infer FromAlias>>
-  ? Joins extends JoinSpecifier[]
-    ? AssembleEntries<PushItemToTuple<{ [K in keyof Joins]: Joins[K] extends InnerJoinSpecifier<TableSpecifier<Identifier<infer JoinSource>, Identifier<infer JoinAlias>>, any> ? [JoinAlias, JoinSource] : never }, [FromAlias, FromSource]>>
-    : never
-  : never
 
 export type JoinsMap<DB extends Database, Joins extends JoinSpecifier[]> = AssembleEntries<{
   [K in keyof Joins]: Joins[K] extends InnerJoinSpecifier<

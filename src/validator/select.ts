@@ -1,6 +1,6 @@
 import { Database } from '../Schema'
 import { SelectStatement, TableSpecifier, Identifier, JoinSpecifier, InnerJoinSpecifier, LogicalExpression, BinaryExpression, NullLiteral, BooleanLiteral, NumericLiteral, Expression, FieldSpecifier, MemberExpression } from '../AST'
-import { ExtractJoinSource, ExtractAllFieldNames, AliasMap, UnionizeValue, ToJoinedSchema } from '../Utils'
+import { ExtractJoinSource, ExtractAllFieldNames, ToJoinedSchema } from '../Utils'
 import { JoinedSchema } from '../Schema'
 
 export type ValidateSelectStatement<
