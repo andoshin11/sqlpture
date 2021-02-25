@@ -93,10 +93,11 @@ There you can see...
       - [ ] Invalid field names
     - [x] `WHERE` clause
       - [x] Invalid field names
-  - [ ] `INSERT`
-    - [ ] Insert field names
-    - [ ] Return field names
-    - [ ] Check field value type
-    - [ ] Insert multiple rows
+  - [x] `INSERT`
+    - [x] Insert target table
+    - [x] Insert field names
+    - [x] Return field names
+    - [x] Check values type
+    - [x] Insert multiple rows
   - [ ] `UPDATE`
   - [ ] `DELETE`
