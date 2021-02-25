@@ -8,6 +8,8 @@ import {
   Identifier,
   SelectStatement,
   NullLiteral,
+  BinaryExpression,
+  MemberExpression,
 } from "../AST";
 import {
   ParseStatementTerminator,
@@ -52,30 +54,49 @@ export type ParseFromClause<
                 Identifier<Source & string>,
                 Identifier<Alias & string>
               >;
-            } & ParseJoinClause<R2>
+            } & ParseJoinClause<R2, TableSpecifier<
+              Identifier<Source & string>,
+              Identifier<Alias & string>
+            >>
           >
         : never
       : Merge<
           {
             from: TableSpecifier<Identifier<Source & string>>;
-          } & ParseJoinClause<R0>
+          } & ParseJoinClause<R0, TableSpecifier<Identifier<Source & string>>>
         >
     : never
   : never;
 
 export type ParseJoinClause<
   T,
+  From extends TableSpecifier,
   Joins extends InnerJoinSpecifier[] = []
 > = Trim<T> extends `${infer Head}INNER JOIN ${infer TableName} ON ${infer R0}`
   ? ParseExpression<R0> extends [infer Exp, infer R1]
     ? Exp extends Expression
       ? ParseJoinClause<
           Trim<R1>,
+          From,
           [...Joins, InnerJoinSpecifier<ParseTableSpecifier<TableName>, Exp>]
         >
       : never
     : never
-  : Merge<ParseWhereClauseForSelect<Trim<T>> & { joins: Joins }>;
+  : Trim<T> extends `${infer Head}INNER JOIN ${infer TableName} USING${infer Space}(${infer Column})${infer R2}`
+    ? ParseTableSpecifier<TableName> extends TableSpecifier<any, infer Source>
+      ? ParseJoinClause<
+          Trim<R2>,
+          From,
+          [
+            ...Joins,
+            InnerJoinSpecifier<
+              ParseTableSpecifier<TableName>,
+              BinaryExpression<MemberExpression<From['alias']['name'], Column>, '=', MemberExpression<Source['name'], Column>>
+            >
+          ]
+        >
+      : never
+    : Merge<ParseWhereClauseForSelect<Trim<T>> & { joins: Joins }>;
 
 export type ParseWhereClauseForSelect<T> = Trim<T> extends ""
   ? Merge<{ where: BooleanLiteral<true> } & ParseLimitClause<Trim<T>>>

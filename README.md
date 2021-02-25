@@ -60,6 +60,8 @@ There you can see...
       - [x] field name from public table
       - [x] field name with table alias prefix
       - [x] SELF JOIN
+      - [x] `USING`
+      - [ ] LEFT JOIN
 - [ ] Query Validator
   - [ ] `SELECT`
     - [x] Field names

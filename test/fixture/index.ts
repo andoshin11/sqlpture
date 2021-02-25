@@ -101,6 +101,8 @@ export type Q32 = "SELECT first_name, c.last_name surname, c.email FROM customer
 
 export type Q33 = "SELECT c.first_name, _c.first_name _first_name , c.last_name, rental.rental_date, rental.return_date, film.title film_title FROM rental INNER JOIN customer AS c ON rental.customer_id = c.customer_id INNER JOIN inventory ON rental.inventory_id = inventory.inventory_id INNER JOIN film ON inventory.film_id = film.film_id INNER JOIN customer _c ON c.customer_id = _c.customer_id ORDER BY rental_date DESC LIMIT 10;"
 
+export type Q34 = "SELECT customer.first_name, customer.last_name, rental.rental_date FROM rental INNER JOIN customer USING(customer_id);"
+
 export type NQ1 = 'SELECT * FROM invalid;'
 
 export type NQ2 = "SELECT * FROM rental INNER JOIN customers ON rental.customer_id = customers.customer_id;"
@@ -143,3 +145,7 @@ export type NQ19 = "SELECT first_name, last_name FROM customer WHERE customers.f
 export type NQ20 = "SELECT first_name, last_name FROM customer WHERE first_names NOT ILIKE 'Jen%';"
 
 export type NQ21 = "SELECT customer_id, rental_id, return_date FROM rental WHERE customer_id <> 1 AND customer_ids <> 2;"
+
+export type NQ22 = "SELECT customer.first_name, customer.last_name, rental.rental_date FROM rental INNER JOIN customer USING(customer_ids);"
+
+export type NQ23 = "SELECT customer.first_name, customer.last_name, rental.rental_date FROM rental INNER JOIN customer USING(first_name);"

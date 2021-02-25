@@ -75,6 +75,7 @@ expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q30>>>(true)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q31>>>(true)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q32>>>(true)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q33>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q34>>>(true)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ1>>>(false)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ2>>>(false)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ3>>>(false)
@@ -97,8 +98,8 @@ expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ19>>>(false)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ20>>>(false)
 // @ts-expect-error
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ21>>>(false) // FIXME
-
-type T7 = Parse<fixtures.NQ14>['where']
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ22>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ23>>>(false)
 
 /**
  * ValidateFieldList
