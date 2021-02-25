@@ -65,8 +65,9 @@ There you can see...
       - [x] Invalid filed names from public schema
       - [x] Invalid field names with table alias prefix
       - [x] Invalid field names with alias
-    - [ ] Join
-      - [ ] Invalid `ON` target fields
+    - [x] Join
+      - [x] Invalid Join target table
+      - [x] Invalid `ON` target fields
     - [ ] `ORDER BY` clause
       - [ ] Invalid field names
     - [ ] `WHERE` clause

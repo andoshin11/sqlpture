@@ -1,5 +1,5 @@
 import { Database } from '../Schema'
-import { SelectStatement, TableSpecifier, Identifier, JoinSpecifier, InnerJoinSpecifier, LogicalExpression, BinaryExpression, NullLiteral, BooleanLiteral, NumericLiteral, Expression, FieldSpecifier, MemberExpression } from '../AST'
+import { SelectStatement, TableSpecifier, Identifier, JoinSpecifier, InnerJoinSpecifier, LogicalExpression, BinaryExpression, NullLiteral, BooleanLiteral, NumericLiteral, Expression, FieldSpecifier, MemberExpression, StringLiteral } from '../AST'
 import { ExtractJoinSource, ExtractAllFieldNames, ToJoinedSchema } from '../Utils'
 import { JoinedSchema } from '../Schema'
 
@@ -7,7 +7,7 @@ export type ValidateSelectStatement<
   DB extends Database,
   Node extends SelectStatement
 > = Node extends SelectStatement<infer Fields, infer From, infer Joins, infer Where, infer Limit, infer Offset>
-  ? true extends (ValidateFieldList<DB, Node> & ValidateFromClause<DB, Node>)
+  ? true extends (ValidateFieldList<DB, Node> & ValidateFromClause<DB, Node> & ValidateJoinClauses<DB, Node>)
     ? true
     : false
   : false
@@ -78,14 +78,66 @@ type ToJoinSourceList<Joins extends JoinSpecifier[], List extends string[] = []>
   : List
  : List
 
+type _CheckExpressionValidity<
+  DB extends Database,
+  Node extends SelectStatement,
+  EXP extends Expression,
+  _JoinedSchema = _GetJoinedSchema<DB, Node>
+> = _JoinedSchema extends JoinedSchema<DB>
+  ? EXP extends NullLiteral
+    ? true
+    : EXP extends BooleanLiteral
+      ? true
+      : EXP extends NumericLiteral
+        ? true
+        : EXP extends StringLiteral
+          ? true
+          : EXP extends Identifier<infer Name>
+            ? Name extends keyof _JoinedSchema['public']
+              ? true
+              : false
+            : EXP extends MemberExpression<infer O, infer P>
+              ? O extends _JoinedSchema['from']['alias']
+                ? P extends keyof _JoinedSchema['from']['schema']
+                  ? true
+                  : false
+                : O extends keyof _JoinedSchema['joins']
+                  ? P extends keyof _JoinedSchema['joins'][O]
+                    ? true
+                    : false
+                  : false
+              : EXP extends BinaryExpression<infer Left, any, infer Right>
+                ? [_CheckExpressionValidity<DB, Node, Left>, _CheckExpressionValidity<DB, Node, Right>] extends [true, true]
+                  ? true
+                  : false
+                : EXP extends LogicalExpression<infer Left, any, infer Right>
+                  ? [_CheckExpressionValidity<DB, Node, Left>, _CheckExpressionValidity<DB, Node, Right>] extends [true, true]
+                    ? true
+                    : false
+                  : false
+  : false
+
+type _CheckJoinConnecter<
+  DB extends Database,
+  Node extends SelectStatement,
+  _JoinedSchema = _GetJoinedSchema<DB, Node>
+> = _JoinedSchema extends JoinedSchema<DB>
+  ? Node extends SelectStatement<infer Fields, infer From, infer Joins, infer Where, infer Limit, infer Offset>
+    ? {
+      [K in keyof Joins]: Joins[K] extends InnerJoinSpecifier<any, infer Where>
+        ? _CheckExpressionValidity<DB, Node, Where>
+        : false
+    }
+    : [false]
+  : [false]
+
 // TODO: ensure join sources' uniqueness
-// TODO: validate ON field
 export type ValidateJoinClauses<
   DB extends Database,
   Node extends SelectStatement
-> = Node extends { joins: JoinSpecifier[] }
-  ? ToJoinSourceList<Node['joins']> extends Array<keyof DB['schema']>
-    ? true
+> = Node extends SelectStatement<infer Fields, infer From, infer Joins, infer Where, infer Limit, infer Offset>
+  ? ToJoinSourceList<Joins> extends Array<keyof DB['schema']>
+    ? _CheckJoinConnecter<DB, Node> extends true[] ? true : false
     : false
   : false
 

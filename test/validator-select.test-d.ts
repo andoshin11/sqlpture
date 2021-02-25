@@ -74,6 +74,16 @@ expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q29>>>(true)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q30>>>(true)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q31>>>(true)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q32>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ1>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ2>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ3>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ4>>>(false) // FIXME
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ5>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ6>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ7>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ8>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ9>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ10>>>(false)
 
 /**
  * ValidateFieldList
@@ -100,3 +110,4 @@ expectType<ValidateJoinClauses<fixtures.DB, Parse<fixtures.Q27>>>(true)
 expectType<ValidateJoinClauses<fixtures.DB, Parse<fixtures.Q28>>>(true)
 expectType<ValidateJoinClauses<fixtures.DB, Parse<fixtures.NQ2>>>(false)
 expectType<ValidateJoinClauses<fixtures.DB, Parse<fixtures.NQ3>>>(false)
+expectType<ValidateJoinClauses<fixtures.DB, Parse<fixtures.NQ10>>>(false)

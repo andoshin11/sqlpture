@@ -93,7 +93,7 @@ export type Q28 = "SELECT customer.first_name, customer.last_name, rental.rental
 
 export type Q29 = 'SELECT first_name FROM customer LIMIT $1'
 
-export type Q30 = "SELECT first_name, c.last_name, rental.rental_date rented FROM rental INNER JOIN customer AS c ON rental.customer_id = customer.customer_id;"
+export type Q30 = "SELECT first_name, c.last_name, rental.rental_date rented FROM rental INNER JOIN customer AS c ON rental.customer_id = c.customer_id;"
 
 export type Q31 = "SELECT * FROM rental INNER JOIN customer ON rental.customer_id = customer.customer_id;"
 
@@ -116,3 +116,5 @@ export type NQ7 = "SELECT first_name, d.last_name, rental.rental_date rented FRO
 export type NQ8 = "SELECT first_name, c.last_name, rentals.rental_date rented FROM rental INNER JOIN customer AS c ON rental.customer_id = customer.customer_id;"
 
 export type NQ9 = "SELECT first_name, c.last_name, rental.rental_dates rented FROM rental INNER JOIN customer AS c ON rental.customer_id = customer.customer_id;"
+
+export type NQ10 = "SELECT first_name, c.last_name, rental.rental_dates rented FROM rental INNER JOIN customers AS c ON rental.customer_id = customer.customer_id;"
