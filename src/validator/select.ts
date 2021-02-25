@@ -7,8 +7,10 @@ export type ValidateSelectStatement<
   DB extends Database,
   Node extends SelectStatement
 > = Node extends SelectStatement<infer Fields, infer From, infer Joins, infer Where, infer Limit, infer Offset>
-  ? any
-  : never
+  ? true extends (ValidateFieldList<DB, Node> & ValidateFromClause<DB, Node>)
+    ? true
+    : false
+  : false
 
 export type ValidSelectStatement<DB extends Database> =
   ValidFromClause<DB> &
@@ -36,7 +38,9 @@ export type ValidateFieldList<
     ? {
       [K in keyof Fields]: Fields[K] extends FieldSpecifier<infer Source, any>
         ? Source extends Identifier<infer Name> // if true, search from public schema
-          ? Name extends keyof _JoinedSchema['public']
+          ? Name extends "*"
+           ? true
+           : Name extends keyof _JoinedSchema['public']
             ? true
             : false
           : Source extends MemberExpression<infer O, infer P>

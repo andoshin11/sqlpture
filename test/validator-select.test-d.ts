@@ -1,6 +1,7 @@
 import { expectType } from 'tsd'
 import * as select from '../src/validator/select'
 import {
+  ValidateSelectStatement,
   ValidateJoinClauses,
   ValidateFromClause,
   ValidateFieldList
@@ -36,11 +37,49 @@ type TValidSelectStatementQ15 = ValidQuery<Parse<fixtures.Q15>>
 type TValidSelectStatementQ16 = ValidQuery<Parse<fixtures.Q16>>
 
 type T1 = Parse<fixtures.Q11>['where']
+type T3 = Parse<fixtures.Q32>['fields']
+
+/**
+ * ValidateSelectStatement
+ */
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q1>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q2>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q3>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q4>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q5>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q6>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q7>>>(true)
+// @ts-expect-error
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q8>>>(true) // FIXME
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q9>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q10>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q11>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q12>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q13>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q14>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q15>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q16>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q17>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q18>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q19>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q20>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q21>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q22>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q23>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q24>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q25>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q26>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q28>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q29>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q30>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q31>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q32>>>(true)
 
 /**
  * ValidateFieldList
  */
 expectType<ValidateFieldList<fixtures.DB, Parse<fixtures.Q30>>>(true)
+expectType<ValidateFieldList<fixtures.DB, Parse<fixtures.Q32>>>(true)
 expectType<ValidateFieldList<fixtures.DB, Parse<fixtures.NQ6>>>(false)
 expectType<ValidateFieldList<fixtures.DB, Parse<fixtures.NQ7>>>(false)
 expectType<ValidateFieldList<fixtures.DB, Parse<fixtures.NQ8>>>(false)
