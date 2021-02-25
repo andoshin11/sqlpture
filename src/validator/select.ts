@@ -12,6 +12,7 @@ export type ValidateSelectStatement<
     : false
   : false
 
+// WIP
 export type ValidSelectStatement<DB extends Database> =
   ValidFromClause<DB> &
   ValidJoinClauses<DB> &

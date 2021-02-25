@@ -176,3 +176,20 @@ export type NQ25 = "SELECT customer.first_name, customer.last_name, rental.renta
 export type NQ26 = "SELECT customer.first_name, customer.last_name, rental.rental_date FROM rental RIGHT JOIN customer ON rental.customer_ids = customer.customer_id;"
 
 export type NQ27 = "SELECT customer.first_name, customer.last_name, rental.rental_date FROM rental RIGHT JOIN customer USING(customer_ids);"
+
+/**
+ * Insert
+ */
+export type NQ200 = "INSERT INTO rental (rental_dates, inventory_id, customer_id, staff_id) VALUES('2021-02-25', 2666, 393, 2);"
+
+export type NQ201 = "INSERT INTO rentals (rental_date, inventory_id, customer_id, staff_id) VALUES('2021-02-25', 2666, 393, 2);"
+
+export type NQ202 = "INSERT INTO rental (rental_date, inventory_id, customer_id, staff_id) VALUES(2, 2666, 393, 2);"
+
+export type NQ203 = "INSERT INTO rental (rental_date, inventory_id, customer_id, staff_id) VALUES('Invalid', 2666, 393, 2);"
+
+export type NQ204 = "INSERT INTO rental (rental_date, inventory_id, customer_id, staff_id) VALUES('2021-02-25', 2666, 393);"
+
+export type NQ205 = "INSERT INTO rental (rental_date, inventory_id, customer_id, staff_id) VALUES('2021-02-25', 2666, 393, 2), ('2021-02-26', 2666, NULL, 2);"
+
+export type NQ206 = "INSERT INTO rental (rental_date, inventory_id, customer_id, staff_id) VALUES('2021-02-25', 2666, 393, 2) RETURNING rental_date, inventory_ids inventory;"
