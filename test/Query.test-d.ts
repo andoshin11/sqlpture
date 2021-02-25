@@ -149,3 +149,15 @@ expectType<T33>(V33)
 type T34 = Query<fixtures.Q34, fixtures.DB>
 const V34: T34 = [{ first_name: 'John', last_name: 'Smith', rental_date: new Date() }]
 expectType<T34>(V34)
+
+type T35 = Query<fixtures.Q35, fixtures.DB>
+const V35: T35 = [{ first_name: 'John', last_name: 'Smith', rental_date: new Date() }]
+expectType<T35>(V35)
+
+type T36 = Query<fixtures.Q36, fixtures.DB>
+const V36: T36 = [{ first_name: 'John', last_name: 'Smith', rental_date: new Date() }]
+expectType<T36>(V36)
+
+type T37 = Query<fixtures.Q37, fixtures.DB>
+const V37: T37 = [{ film_id: 1, title: 'Matrix', inventory_id: 10 }]
+expectType<T37>(V37)

@@ -61,7 +61,7 @@ There you can see...
       - [x] field name with table alias prefix
       - [x] SELF JOIN
       - [x] `USING`
-      - [ ] LEFT JOIN
+      - [x] LEFT JOIN
 - [ ] Query Validator
   - [ ] `SELECT`
     - [x] Field names
