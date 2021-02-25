@@ -40,21 +40,21 @@ type EvaluateStatement<
 //   ? EvaluateDeleteStatement<DB, Node>
 //   : never;
 
-type EvaluateInsertStatement<
-  DB extends Database,
-  Node extends InsertStatement
-> = Node extends InsertStatement<infer TableName, infer Assignments>
-  ? {
-      [K in keyof DB]: K extends TableName
-        ? InsertRow<
-            TableName extends keyof DB["schema"]
-              ? DB["schema"][TableName]
-              : never,
-            Assignments
-          >
-        : DB[K];
-    }
-  : never;
+// type EvaluateInsertStatement<
+//   DB extends Database,
+//   Node extends InsertStatement
+// > = Node extends InsertStatement<infer TableName, infer Assignments>
+//   ? {
+//       [K in keyof DB]: K extends TableName
+//         ? InsertRow<
+//             TableName extends keyof DB["schema"]
+//               ? DB["schema"][TableName]
+//               : never,
+//             Assignments
+//           >
+//         : DB[K];
+//     }
+//   : never;
 
 type InsertRow<
   Table extends readonly any[],

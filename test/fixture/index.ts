@@ -113,6 +113,15 @@ export type Q38 = "SELECT customer.first_name, customer.last_name, rental.rental
 
 export type Q39 = "SELECT customer.first_name, customer.last_name, rental.rental_date FROM rental RIGHT JOIN customer USING(customer_id);"
 
+/**
+ * Insert
+ */
+export type Q200 = "INSERT INTO rental (rental_date, inventory_id, customer_id, staff_id) VALUES('2021-02-25', 2666, 393, 2);"
+
+export type Q201 = "INSERT INTO rental (rental_date, inventory_id, customer_id, staff_id) VALUES('2021-02-25', 2666, 393, 2), ('2021-02-26', 2666, 393, 2) RETURNING *;"
+
+export type Q202 = "INSERT INTO rental (rental_date, inventory_id, customer_id, staff_id) VALUES('2021-02-25', 2666, 393, 2) RETURNING rental_date, inventory_id inventory;"
+
 export type NQ1 = 'SELECT * FROM invalid;'
 
 export type NQ2 = "SELECT * FROM rental INNER JOIN customers ON rental.customer_id = customers.customer_id;"

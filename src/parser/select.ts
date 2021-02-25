@@ -7,7 +7,6 @@ import {
   TableSpecifier,
   Identifier,
   SelectStatement,
-  NullLiteral,
   BinaryExpression,
   MemberExpression,
 } from "../AST";

@@ -74,6 +74,10 @@ There you can see...
       - [ ] UNION ALL
     - [ ] INTERSECT
     - [ ] EXCEPT
+  - [ ] Modifying Data
+    - [ ] `INSERT`
+      - [ ] Return Data
+      - [ ] Insert multiple rows
 - [ ] Query Validator
   - [ ] `SELECT`
     - [x] Field names
@@ -88,5 +92,9 @@ There you can see...
     - [x] `WHERE` clause
       - [x] Invalid field names
   - [ ] `INSERT`
+    - [ ] Insert field names
+    - [ ] Return field names
+    - [ ] Check field value type
+    - [ ] Insert multiple rows
   - [ ] `UPDATE`
   - [ ] `DELETE`

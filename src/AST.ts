@@ -118,11 +118,15 @@ export type SelectStatement<
 
 export type InsertStatement<
   TableName extends string = any,
-  Values extends readonly AssignmentExpression<any, any>[] = any
+  Fields extends string[] = any,
+  Values extends readonly Expression[][] = Expression[][],
+  ReturningFields extends FieldSpecifier<any>[] = FieldSpecifier<any>[]
 > = {
   type: "InsertStatement";
   tableName: TableName;
+  fields: Fields,
   values: Values;
+  returningFields: ReturningFields;
 };
 
 export type UpdateStatement<
