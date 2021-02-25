@@ -19,7 +19,13 @@ import {
   UpdateStatement,
 } from "./AST";
 import { Database, JoinedSchema } from "./Schema";
-import { MatchStringLike, Merge, UnionToIntersection, AssembleEntries, ToJoinedSchema } from "./Utils";
+import {
+  MatchStringLike,
+  Merge,
+  UnionToIntersection,
+  AssembleEntries,
+  ToJoinedSchema,
+} from "./Utils";
 
 type EvaluateStatement<
   DB extends Database,
@@ -147,7 +153,7 @@ export type EvaluateSelectStatement<
     >
     ? Source extends keyof DB["schema"]
       ? Fields extends [FieldSpecifier<Identifier<"*">, Identifier<"*">>]
-        ? Array<ToJoinedSchema<DB, From, Joins>['public']>
+        ? Array<ToJoinedSchema<DB, From, Joins>["public"]>
         : Array<ExtractFields<ToJoinedSchema<DB, From, Joins>, Fields>>
       : never
     : never
@@ -156,27 +162,45 @@ export type EvaluateSelectStatement<
 export type EvaluateInsertStatement<
   DB extends Database,
   Node extends InsertStatement
-> = Node extends InsertStatement<infer TableName, infer Fields, infer Values, infer ReturningFields>
+> = Node extends InsertStatement<
+  infer TableName,
+  infer Fields,
+  infer Values,
+  infer ReturningFields
+>
   ? ReturningFields extends []
     ? never
-    : TableName extends keyof DB['schema']
-      ? ReturningFields extends [FieldSpecifier<Identifier<"*">, Identifier<"*">>]
-        ? Array<DB['schema'][TableName]>
-        : Array<AssembleEntries<{
-          [K in keyof ReturningFields]: ReturningFields[K] extends FieldSpecifier<infer Source, Identifier<infer Alias>>
-            ? Source extends Identifier<infer Name>
-              ? Name extends keyof DB['schema'][TableName]
-                ? [ExtractFieldAlias<ReturningFields[K]>, DB['schema'][TableName][Name]]
-                : never
-              : never
-            : never
-        }>>
-      : never
+    : TableName extends keyof DB["schema"]
+    ? ReturningFields extends [FieldSpecifier<Identifier<"*">, Identifier<"*">>]
+      ? Array<DB["schema"][TableName]>
+      : Array<
+          AssembleEntries<
+            {
+              [K in keyof ReturningFields]: ReturningFields[K] extends FieldSpecifier<
+                infer Source,
+                Identifier<infer Alias>
+              >
+                ? Source extends Identifier<infer Name>
+                  ? Name extends keyof DB["schema"][TableName]
+                    ? [
+                        ExtractFieldAlias<ReturningFields[K]>,
+                        DB["schema"][TableName][Name]
+                      ]
+                    : never
+                  : never
+                : never;
+            }
+          >
+        >
     : never
+  : never;
 
-export type ExtractFieldAlias<Field> = Field extends FieldSpecifier<Identifier<any>, Identifier<infer Alias>>
- ? Alias
- : never;
+export type ExtractFieldAlias<Field> = Field extends FieldSpecifier<
+  Identifier<any>,
+  Identifier<infer Alias>
+>
+  ? Alias
+  : never;
 
 export type FilterUndefined<T> = T extends Readonly<[infer Head, ...infer Tail]>
   ? Head extends undefined
@@ -187,25 +211,30 @@ export type FilterUndefined<T> = T extends Readonly<[infer Head, ...infer Tail]>
 export type ExtractFields<
   Schema extends JoinedSchema<any>,
   Fields extends FieldSpecifier<any>[]
-> = AssembleEntries<{
-  [K in keyof Fields]: Fields[K] extends FieldSpecifier<infer Source, Identifier<infer Alias>>
-    ? Source extends Identifier<infer Name>
-      ? Name extends keyof Schema['public']
-        ? [ExtractFieldAlias<Fields[K]>, Schema['public'][Name]]
-        : never
-      : Source extends MemberExpression<infer O, infer P>
-        ? O extends keyof Schema['joins']
-          ? P extends keyof Schema['joins'][O]
-            ? [Alias, Schema['joins'][O][P]]
+> = AssembleEntries<
+  {
+    [K in keyof Fields]: Fields[K] extends FieldSpecifier<
+      infer Source,
+      Identifier<infer Alias>
+    >
+      ? Source extends Identifier<infer Name>
+        ? Name extends keyof Schema["public"]
+          ? [ExtractFieldAlias<Fields[K]>, Schema["public"][Name]]
+          : never
+        : Source extends MemberExpression<infer O, infer P>
+        ? O extends keyof Schema["joins"]
+          ? P extends keyof Schema["joins"][O]
+            ? [Alias, Schema["joins"][O][P]]
             : never
-          : O extends Schema['from']['alias']
-            ? P extends keyof Schema['from']['schema']
-              ? [Alias, Schema['from']['schema'][P]]
-              : never
+          : O extends Schema["from"]["alias"]
+          ? P extends keyof Schema["from"]["schema"]
+            ? [Alias, Schema["from"]["schema"][P]]
             : never
+          : never
         : never
-    : never
-}>
+      : never;
+  }
+>;
 
 type EvaluateExpression<Row, Exp> =
   | EvaluateLogicalExpression<Row, Exp>

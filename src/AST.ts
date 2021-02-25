@@ -27,7 +27,7 @@ export type BooleanLiteral<Value extends boolean = boolean> = {
 
 export type NullLiteral = { type: "NullLiteral"; value: null };
 
-export type VariableExpression = { type: "VariableExpression"; value: any }
+export type VariableExpression = { type: "VariableExpression"; value: any };
 
 export type BinaryOperator = "=" | "!=" | "LIKE";
 export type BinaryExpression<
@@ -127,7 +127,7 @@ export type InsertStatement<
 > = {
   type: "InsertStatement";
   tableName: TableName;
-  fields: Fields,
+  fields: Fields;
   values: Values;
   returningFields: ReturningFields;
 };

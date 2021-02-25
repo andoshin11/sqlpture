@@ -4,4 +4,4 @@ export * from "./Parser";
 export * from "./Printer";
 export * from "./Evaluator";
 export * from "./Query";
-export * from './Validator'
+export * from "./Validator";

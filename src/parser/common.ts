@@ -134,25 +134,27 @@ export type ParseFieldSpecifierList<T> = T extends `${infer Head},${infer Tail}`
     ]
   : [ParseFieldSpecifier<Trim<T>>];
 
-export type ParseFieldSpecifier<T> = T extends `${infer Field} AS ${infer Alias}`
+export type ParseFieldSpecifier<
+  T
+> = T extends `${infer Field} AS ${infer Alias}`
   ? FieldSpecifier<
       ParseMemberExpression<Trim<Field>>[0],
       ParseIdentifier<Trim<Alias>>[0]
     >
   : T extends `${infer Field} ${infer Alias}`
-    ? FieldSpecifier<
+  ? FieldSpecifier<
       ParseMemberExpression<Trim<Field>>[0],
       ParseIdentifier<Trim<Alias>>[0]
     >
-    : ParseMemberExpression<T> extends [infer M, ""]
-      ? M extends MemberExpression<infer O, infer P>
-        ? FieldSpecifier<M, Identifier<P>>
-        : M extends Identifier
-          ? FieldSpecifier<M, M>
-          : T extends string
-            ? FieldSpecifier<Identifier<T>, Identifier<T>>
-          : never
-      : never;
+  : ParseMemberExpression<T> extends [infer M, ""]
+  ? M extends MemberExpression<infer O, infer P>
+    ? FieldSpecifier<M, Identifier<P>>
+    : M extends Identifier
+    ? FieldSpecifier<M, M>
+    : T extends string
+    ? FieldSpecifier<Identifier<T>, Identifier<T>>
+    : never
+  : never;
 
 export type Tokenize<T> = Trim<T> extends `${infer Head} ${infer Tail}`
   ? [Head, Tail]

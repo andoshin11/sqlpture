@@ -17,7 +17,7 @@ import {
 } from "./AST";
 import { IntegerStrings, Trim } from "./Utils";
 import { ParseSelectStatement } from "./parser/select";
-import { ParseInsertStatement } from './parser/insert'
+import { ParseInsertStatement } from "./parser/insert";
 
 export type Parse<T> = ParseStatement<T> extends [infer Statement, infer Rest]
   ? Trim<Rest> extends ";"

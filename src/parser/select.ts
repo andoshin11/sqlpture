@@ -53,10 +53,13 @@ export type ParseFromClause<
                 Identifier<Source & string>,
                 Identifier<Alias & string>
               >;
-            } & ParseJoinClause<R2, TableSpecifier<
-              Identifier<Source & string>,
-              Identifier<Alias & string>
-            >>
+            } & ParseJoinClause<
+              R2,
+              TableSpecifier<
+                Identifier<Source & string>,
+                Identifier<Alias & string>
+              >
+            >
           >
         : never
       : Merge<
@@ -83,77 +86,89 @@ export type ParseJoinClause<
       : never
     : never
   : Trim<T> extends `${infer Head}INNER JOIN ${infer TableName} USING${infer Space}(${infer Column})${infer R2}`
-    ? ParseTableSpecifier<TableName> extends TableSpecifier<any, infer Source>
-      ? ParseJoinClause<
-          Trim<R2>,
-          From,
-          [
-            ...Joins,
-            InnerJoinSpecifier<
-              ParseTableSpecifier<TableName>,
-              BinaryExpression<MemberExpression<From['alias']['name'], Column>, '=', MemberExpression<Source['name'], Column>>
+  ? ParseTableSpecifier<TableName> extends TableSpecifier<any, infer Source>
+    ? ParseJoinClause<
+        Trim<R2>,
+        From,
+        [
+          ...Joins,
+          InnerJoinSpecifier<
+            ParseTableSpecifier<TableName>,
+            BinaryExpression<
+              MemberExpression<From["alias"]["name"], Column>,
+              "=",
+              MemberExpression<Source["name"], Column>
             >
-          ]
+          >
+        ]
+      >
+    : never
+  : Trim<T> extends `${infer Head}LEFT JOIN ${infer TableName} ON ${infer R0}`
+  ? ParseExpression<R0> extends [infer Exp, infer R1]
+    ? Exp extends Expression
+      ? ParseJoinClause<
+          Trim<R1>,
+          From,
+          [...Joins, InnerJoinSpecifier<ParseTableSpecifier<TableName>, Exp>]
         >
       : never
-    : Trim<T> extends `${infer Head}LEFT JOIN ${infer TableName} ON ${infer R0}`
-      ? ParseExpression<R0> extends [infer Exp, infer R1]
-        ? Exp extends Expression
-          ? ParseJoinClause<
-              Trim<R1>,
-              From,
-              [...Joins, InnerJoinSpecifier<ParseTableSpecifier<TableName>, Exp>]
+    : never
+  : Trim<T> extends `${infer Head}LEFT JOIN ${infer TableName} USING${infer Space}(${infer Column})${infer R2}`
+  ? ParseTableSpecifier<TableName> extends TableSpecifier<any, infer Source>
+    ? ParseJoinClause<
+        Trim<R2>,
+        From,
+        [
+          ...Joins,
+          InnerJoinSpecifier<
+            ParseTableSpecifier<TableName>,
+            BinaryExpression<
+              MemberExpression<From["alias"]["name"], Column>,
+              "=",
+              MemberExpression<Source["name"], Column>
             >
-          : never
-        : never
-      : Trim<T> extends `${infer Head}LEFT JOIN ${infer TableName} USING${infer Space}(${infer Column})${infer R2}`
-        ? ParseTableSpecifier<TableName> extends TableSpecifier<any, infer Source>
-          ? ParseJoinClause<
-              Trim<R2>,
-              From,
-              [
-                ...Joins,
-                InnerJoinSpecifier<
-                  ParseTableSpecifier<TableName>,
-                  BinaryExpression<MemberExpression<From['alias']['name'], Column>, '=', MemberExpression<Source['name'], Column>>
-                >
-              ]
+          >
+        ]
+      >
+    : never
+  : Trim<T> extends `${infer Head}RIGHT JOIN ${infer TableName} ON ${infer R0}`
+  ? ParseExpression<R0> extends [infer Exp, infer R1]
+    ? Exp extends Expression
+      ? ParseJoinClause<
+          Trim<R1>,
+          From,
+          [...Joins, InnerJoinSpecifier<ParseTableSpecifier<TableName>, Exp>]
+        >
+      : never
+    : never
+  : Trim<T> extends `${infer Head}RIGHT JOIN ${infer TableName} USING${infer Space}(${infer Column})${infer R2}`
+  ? ParseTableSpecifier<TableName> extends TableSpecifier<any, infer Source>
+    ? ParseJoinClause<
+        Trim<R2>,
+        From,
+        [
+          ...Joins,
+          InnerJoinSpecifier<
+            ParseTableSpecifier<TableName>,
+            BinaryExpression<
+              MemberExpression<From["alias"]["name"], Column>,
+              "=",
+              MemberExpression<Source["name"], Column>
             >
-          : never
-        : Trim<T> extends `${infer Head}RIGHT JOIN ${infer TableName} ON ${infer R0}`
-          ? ParseExpression<R0> extends [infer Exp, infer R1]
-            ? Exp extends Expression
-              ? ParseJoinClause<
-                  Trim<R1>,
-                  From,
-                  [...Joins, InnerJoinSpecifier<ParseTableSpecifier<TableName>, Exp>]
-                >
-              : never
-            : never
-          : Trim<T> extends `${infer Head}RIGHT JOIN ${infer TableName} USING${infer Space}(${infer Column})${infer R2}`
-            ? ParseTableSpecifier<TableName> extends TableSpecifier<any, infer Source>
-              ? ParseJoinClause<
-                  Trim<R2>,
-                  From,
-                  [
-                    ...Joins,
-                    InnerJoinSpecifier<
-                      ParseTableSpecifier<TableName>,
-                      BinaryExpression<MemberExpression<From['alias']['name'], Column>, '=', MemberExpression<Source['name'], Column>>
-                    >
-                  ]
-                >
-              : never
-            : Merge<ParseWhereClauseForSelect<Trim<T>> & { joins: Joins }>;
+          >
+        ]
+      >
+    : never
+  : Merge<ParseWhereClauseForSelect<Trim<T>> & { joins: Joins }>;
 
 export type ParseWhereClauseForSelect<T> = Trim<T> extends ""
   ? Merge<{ where: BooleanLiteral<true> } & ParseLimitClause<Trim<T>>>
   : Trim<T> extends `${infer Head}WHERE ${infer Where}`
-    ? ParseExpression<Where> extends [infer Exp, infer R0]
-      ? Exp extends Expression
-        ? Merge<{ where: Merge<Exp> } & ParseLimitClause<R0>>
-        : never
+  ? ParseExpression<Where> extends [infer Exp, infer R0]
+    ? Exp extends Expression
+      ? Merge<{ where: Merge<Exp> } & ParseLimitClause<R0>>
       : never
+    : never
   : Merge<{ where: BooleanLiteral<true> } & ParseLimitClause<Trim<T>>>;
 
 export type ParseLimitClause<
@@ -167,12 +182,12 @@ export type ParseLimitClause<
           } & ParseOffsetClause<R1>
         >
       : Limit extends "NULL"
-        ? Merge<
+      ? Merge<
           {
             limit: NumericLiteral<-1>;
           } & ParseOffsetClause<R1>
         >
-        : Merge<
+      : Merge<
           {
             limit: NumericLiteral<-1>;
           } & ParseOffsetClause<R1>
