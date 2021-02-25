@@ -109,6 +109,10 @@ export type Q36 = "SELECT customer.first_name, customer.last_name, rental.rental
 
 export type Q37 = "SELECT film.film_id, film.title, inventory_id FROM film LEFT JOIN inventory ON inventory.film_id = film.film_id WHERE inventory.film_id IS NULL ORDER BY title;"
 
+export type Q38 = "SELECT customer.first_name, customer.last_name, rental.rental_date FROM rental RIGHT JOIN customer ON rental.customer_id = customer.customer_id;"
+
+export type Q39 = "SELECT customer.first_name, customer.last_name, rental.rental_date FROM rental RIGHT JOIN customer USING(customer_id);"
+
 export type NQ1 = 'SELECT * FROM invalid;'
 
 export type NQ2 = "SELECT * FROM rental INNER JOIN customers ON rental.customer_id = customers.customer_id;"
@@ -159,3 +163,7 @@ export type NQ23 = "SELECT customer.first_name, customer.last_name, rental.renta
 export type NQ24 = "SELECT customer.first_name, customer.last_name, rental.rental_date FROM rental LEFT JOIN customer ON rental.customer_ids = customer.customer_id;"
 
 export type NQ25 = "SELECT customer.first_name, customer.last_name, rental.rental_date FROM rental LEFT JOIN customer USING(customer_ids);"
+
+export type NQ26 = "SELECT customer.first_name, customer.last_name, rental.rental_date FROM rental RIGHT JOIN customer ON rental.customer_ids = customer.customer_id;"
+
+export type NQ27 = "SELECT customer.first_name, customer.last_name, rental.rental_date FROM rental RIGHT JOIN customer USING(customer_ids);"

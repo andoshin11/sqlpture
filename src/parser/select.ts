@@ -68,6 +68,7 @@ export type ParseFromClause<
     : never
   : never;
 
+// TODO refactoring
 export type ParseJoinClause<
   T,
   From extends TableSpecifier,
@@ -120,7 +121,31 @@ export type ParseJoinClause<
               ]
             >
           : never
-    : Merge<ParseWhereClauseForSelect<Trim<T>> & { joins: Joins }>;
+        : Trim<T> extends `${infer Head}RIGHT JOIN ${infer TableName} ON ${infer R0}`
+          ? ParseExpression<R0> extends [infer Exp, infer R1]
+            ? Exp extends Expression
+              ? ParseJoinClause<
+                  Trim<R1>,
+                  From,
+                  [...Joins, InnerJoinSpecifier<ParseTableSpecifier<TableName>, Exp>]
+                >
+              : never
+            : never
+          : Trim<T> extends `${infer Head}RIGHT JOIN ${infer TableName} USING${infer Space}(${infer Column})${infer R2}`
+            ? ParseTableSpecifier<TableName> extends TableSpecifier<any, infer Source>
+              ? ParseJoinClause<
+                  Trim<R2>,
+                  From,
+                  [
+                    ...Joins,
+                    InnerJoinSpecifier<
+                      ParseTableSpecifier<TableName>,
+                      BinaryExpression<MemberExpression<From['alias']['name'], Column>, '=', MemberExpression<Source['name'], Column>>
+                    >
+                  ]
+                >
+              : never
+            : Merge<ParseWhereClauseForSelect<Trim<T>> & { joins: Joins }>;
 
 export type ParseWhereClauseForSelect<T> = Trim<T> extends ""
   ? Merge<{ where: BooleanLiteral<true> } & ParseLimitClause<Trim<T>>>

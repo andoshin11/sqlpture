@@ -79,6 +79,8 @@ expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q34>>>(true)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q35>>>(true)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q36>>>(true)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q37>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q38>>>(true)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q39>>>(true)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ1>>>(false)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ2>>>(false)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ3>>>(false)
@@ -105,6 +107,8 @@ expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ22>>>(false)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ23>>>(false)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ24>>>(false)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ25>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ26>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ27>>>(false)
 
 /**
  * ValidateFieldList

@@ -62,6 +62,7 @@ There you can see...
       - [x] SELF JOIN
       - [x] `USING`
       - [x] LEFT JOIN
+      - [x] RIGHT JOIN
 - [ ] Query Validator
   - [ ] `SELECT`
     - [x] Field names
