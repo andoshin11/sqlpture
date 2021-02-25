@@ -51,11 +51,14 @@ There you can see...
       - [x] `SELECT DISTINCT column_name FROM table_name`
       - [ ] (PostgreSQL) SELECT statement with expressions
       - [ ] `LENGTH()` function
+      - [ ] `SUM()` function
+      - [ ] `COUNT()` function
+      - [ ] `HAVING` clause
     - [ ] Column Alias
       - [x] `SELECT column_name AS alias_name FROM table_name`
       - [x] `SELECT column_name alias_name FROM table_name`
       - [ ] Column Aliases that contain spaces
-    - [x] Join Tables
+    - [ ] Join Tables
       - [x] INNER JOIN multiple tables
       - [x] field name from public table
       - [x] field name with table alias prefix
@@ -63,6 +66,14 @@ There you can see...
       - [x] `USING`
       - [x] LEFT JOIN
       - [x] RIGHT JOIN
+      - [ ] FULL OUTER JOIN
+      - [ ] CROSS JOIN
+      - [ ] NATURAL JOIN
+    - [ ] GROUP BY
+    - [ ] UNION
+      - [ ] UNION ALL
+    - [ ] INTERSECT
+    - [ ] EXCEPT
 - [ ] Query Validator
   - [ ] `SELECT`
     - [x] Field names
