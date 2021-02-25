@@ -75,9 +75,11 @@ There you can see...
     - [ ] INTERSECT
     - [ ] EXCEPT
   - [ ] Modifying Data
-    - [ ] `INSERT`
-      - [ ] Return Data
-      - [ ] Insert multiple rows
+    - [x] `INSERT`
+      - [x] Return Data
+      - [x] Insert multiple rows
+    - [ ] `UPDATE`
+    - [ ] `DELETE`
 - [ ] Query Validator
   - [ ] `SELECT`
     - [x] Field names

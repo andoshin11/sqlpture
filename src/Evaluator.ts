@@ -24,7 +24,11 @@ import { MatchStringLike, Merge, UnionToIntersection, AssembleEntries, ToJoinedS
 type EvaluateStatement<
   DB extends Database,
   Node extends Statement
-> = Node extends SelectStatement ? EvaluateSelectStatement<DB, Node> : never;
+> = Node extends SelectStatement
+  ? EvaluateSelectStatement<DB, Node>
+  : Node extends InsertStatement
+  ? EvaluateInsertStatement<DB, Node>
+  : never;
 
 // TBD
 // type EvaluateStatement<
@@ -38,22 +42,6 @@ type EvaluateStatement<
 //   ? EvaluateUpdateStatement<DB, Node>
 //   : Node extends DeleteStatement
 //   ? EvaluateDeleteStatement<DB, Node>
-//   : never;
-
-// type EvaluateInsertStatement<
-//   DB extends Database,
-//   Node extends InsertStatement
-// > = Node extends InsertStatement<infer TableName, infer Assignments>
-//   ? {
-//       [K in keyof DB]: K extends TableName
-//         ? InsertRow<
-//             TableName extends keyof DB["schema"]
-//               ? DB["schema"][TableName]
-//               : never,
-//             Assignments
-//           >
-//         : DB[K];
-//     }
 //   : never;
 
 type InsertRow<
@@ -164,6 +152,27 @@ export type EvaluateSelectStatement<
       : never
     : never
   : never;
+
+export type EvaluateInsertStatement<
+  DB extends Database,
+  Node extends InsertStatement
+> = Node extends InsertStatement<infer TableName, infer Fields, infer Values, infer ReturningFields>
+  ? ReturningFields extends []
+    ? never
+    : TableName extends keyof DB['schema']
+      ? ReturningFields extends [FieldSpecifier<Identifier<"*">, Identifier<"*">>]
+        ? Array<DB['schema'][TableName]>
+        : Array<AssembleEntries<{
+          [K in keyof ReturningFields]: ReturningFields[K] extends FieldSpecifier<infer Source, Identifier<infer Alias>>
+            ? Source extends Identifier<infer Name>
+              ? Name extends keyof DB['schema'][TableName]
+                ? [ExtractFieldAlias<ReturningFields[K]>, DB['schema'][TableName][Name]]
+                : never
+              : never
+            : never
+        }>>
+      : never
+    : never
 
 export type ExtractFieldAlias<Field> = Field extends FieldSpecifier<Identifier<any>, Identifier<infer Alias>>
  ? Alias

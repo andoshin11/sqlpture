@@ -1,9 +1,18 @@
 import { BooleanLiteral, Expression, InsertStatement, NullLiteral, NumericLiteral, StringLiteral } from '../AST'
 import { ParseFieldSpecifierList } from './common'
-import { Merge, Trim } from '../Utils'
+import { Trim } from '../Utils'
 
 export type ParseInsertStatement<T> = T extends `INSERT INTO ${infer R0}`
-  ? ParseInsertClause<T>
+  ? ParseInsertClause<T> extends Partial<
+      InsertStatement<
+        infer TableName,
+        infer Fields,
+        infer Values,
+        infer ReturningFields
+      >
+    >
+    ? [InsertStatement<TableName, Fields, Values, ReturningFields>, ""]
+    : never
   : never
 
 export type ParseInsertClause<T> = T extends `INSERT INTO ${infer TableName} (${infer Fields}) VALUES${infer  R0}`
