@@ -12,6 +12,7 @@ import {
   SelectStatement,
   StringLiteral,
   TableSpecifier,
+  VariableExpression,
 } from "./AST";
 import { JoinStrings, StringContains } from "./Utils";
 
@@ -29,6 +30,8 @@ export type Print<T> = T extends Identifier<infer N>
   ? "false"
   : T extends NullLiteral
   ? "null"
+  : T extends VariableExpression
+  ? "$N"
   : T extends BinaryExpression<infer L, infer O, infer R>
   ? // @ts-ignore due to excessive depth
     `${Print<L>} ${O} ${Print<R>}`

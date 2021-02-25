@@ -1,4 +1,4 @@
-import { BooleanLiteral, Expression, InsertStatement, NullLiteral, NumericLiteral, StringLiteral } from '../AST'
+import { BooleanLiteral, Expression, InsertStatement, NullLiteral, NumericLiteral, StringLiteral, VariableExpression } from '../AST'
 import { ParseFieldSpecifierList } from './common'
 import { Trim } from '../Utils'
 
@@ -31,15 +31,17 @@ type ParseValues<T> = T extends `${infer Head},${infer Tail}`
   ? [ParseValue<Head>, ...ParseValues<Tail>]
   : [ParseValue<T>]
 
-type ParseValue<T> = Trim<T> extends 'NULL'
-  ? NullLiteral
-  : Trim<T> extends 'TRUE'
-    ? BooleanLiteral<true>
-    : Trim<T> extends 'FALSE'
-      ? BooleanLiteral<false>
-      : Trim<T> extends `'${infer S}'`
-        ? StringLiteral<S>
-        : NumericLiteral
+type ParseValue<T> = Trim<T> extends `$${infer R0}`
+  ? VariableExpression
+  : Trim<T> extends 'NULL'
+    ? NullLiteral
+    : Trim<T> extends 'TRUE'
+      ? BooleanLiteral<true>
+      : Trim<T> extends 'FALSE'
+        ? BooleanLiteral<false>
+        : Trim<T> extends `'${infer S}'`
+          ? StringLiteral<S>
+          : NumericLiteral
 
 type ParseReturningClause<T> = T extends `${infer R0}RETURNING${infer FieldNames}`
   ? FieldNames extends `${infer R1};`

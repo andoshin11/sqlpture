@@ -27,6 +27,8 @@ export type BooleanLiteral<Value extends boolean = boolean> = {
 
 export type NullLiteral = { type: "NullLiteral"; value: null };
 
+export type VariableExpression = { type: "VariableExpression"; value: any }
+
 export type BinaryOperator = "=" | "!=" | "LIKE";
 export type BinaryExpression<
   Left extends Expression = Expression,
@@ -86,7 +88,8 @@ export type Expression =
   | StringLiteral
   | NumericLiteral
   | BooleanLiteral
-  | NullLiteral;
+  | NullLiteral
+  | VariableExpression;
 
 export type InnerJoinSpecifier<
   From extends TableSpecifier<any> = TableSpecifier<any>,

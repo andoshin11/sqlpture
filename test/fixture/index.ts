@@ -122,6 +122,8 @@ export type Q201 = "INSERT INTO rental (rental_date, inventory_id, customer_id, 
 
 export type Q202 = "INSERT INTO rental (rental_date, inventory_id, customer_id, staff_id) VALUES('2021-02-25', 2666, 393, 2) RETURNING rental_date, inventory_id inventory;"
 
+export type Q203 = 'INSERT INTO customer (store_id, first_name, last_name, email, address_id) VALUES ($1, $2, $3, $4, $5) RETURNING *;'
+
 export type NQ1 = 'SELECT * FROM invalid;'
 
 export type NQ2 = "SELECT * FROM rental INNER JOIN customers ON rental.customer_id = customers.customer_id;"

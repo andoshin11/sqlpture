@@ -6,6 +6,7 @@ import * as fixtures from '../fixture'
 expectType<ValidateInsertStatement<fixtures.DB, Parse<fixtures.Q200>>>(true)
 expectType<ValidateInsertStatement<fixtures.DB, Parse<fixtures.Q201>>>(true)
 expectType<ValidateInsertStatement<fixtures.DB, Parse<fixtures.Q202>>>(true)
+expectType<ValidateInsertStatement<fixtures.DB, Parse<fixtures.Q203>>>(true)
 
 
 expectType<ValidateInsertStatement<fixtures.DB, Parse<fixtures.NQ200>>>(false)

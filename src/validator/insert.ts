@@ -1,5 +1,5 @@
 import { Database } from '../Schema'
-import { BooleanLiteral, Expression, InsertStatement, NullLiteral, NumericLiteral, StringLiteral, FieldSpecifier, Identifier } from '../AST'
+import { BooleanLiteral, Expression, InsertStatement, NullLiteral, NumericLiteral, StringLiteral, FieldSpecifier, Identifier, VariableExpression } from '../AST'
 
 export type ValidateInsertStatement<
   DB extends Database,
@@ -61,7 +61,9 @@ type _CheckFieldsMatch<
               ? Head extends number
                 ? _CheckFieldsMatch<Tail, _Tail, [...List, true]>
                 : _CheckFieldsMatch<Tail, _Tail, [...List, false]>
-              : _CheckFieldsMatch<Tail, _Tail, [...List, false]>
+              : _Head extends VariableExpression
+                ? _CheckFieldsMatch<Tail, _Tail, [...List, true]>
+                : _CheckFieldsMatch<Tail, _Tail, [...List, false]>
       : false
     : false
   : List extends true[] ? true : false
