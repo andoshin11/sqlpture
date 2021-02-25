@@ -14,6 +14,7 @@ import {
   FieldSpecifier,
   MemberExpression,
   StringLiteral,
+  VariableExpression,
 } from "../AST";
 import {
   ExtractJoinSource,
@@ -127,7 +128,9 @@ type _CheckExpressionValidity<
   EXP extends Expression,
   _JoinedSchema = _GetJoinedSchema<DB, Node>
 > = _JoinedSchema extends JoinedSchema<DB>
-  ? EXP extends NullLiteral
+  ? EXP extends VariableExpression
+    ? true
+    : EXP extends NullLiteral
     ? true
     : EXP extends BooleanLiteral
     ? true

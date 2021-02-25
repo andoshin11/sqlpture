@@ -41,9 +41,11 @@ expectType<ValidateQuery<fixtures.Q36, fixtures.DB>>(true)
 expectType<ValidateQuery<fixtures.Q37, fixtures.DB>>(true)
 expectType<ValidateQuery<fixtures.Q38, fixtures.DB>>(true)
 expectType<ValidateQuery<fixtures.Q39, fixtures.DB>>(true)
+expectType<ValidateQuery<fixtures.Q40, fixtures.DB>>(true)
 expectType<ValidateQuery<fixtures.Q200, fixtures.DB>>(true)
 expectType<ValidateQuery<fixtures.Q201, fixtures.DB>>(true)
 expectType<ValidateQuery<fixtures.Q202, fixtures.DB>>(true)
+expectType<ValidateQuery<fixtures.Q203, fixtures.DB>>(true)
 
 
 

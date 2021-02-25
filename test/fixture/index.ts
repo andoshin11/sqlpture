@@ -113,6 +113,8 @@ export type Q38 = "SELECT customer.first_name, customer.last_name, rental.rental
 
 export type Q39 = "SELECT customer.first_name, customer.last_name, rental.rental_date FROM rental RIGHT JOIN customer USING(customer_id);"
 
+export type Q40 = 'SELECT c.customer_id id, c.first_name, c.last_name, c.email, country.country, city.city, a.district, a.address, a.address2 FROM customer AS c INNER JOIN address AS a ON c.address_id = a.address_id INNER JOIN city ON a.city_id = city.city_id INNER JOIN country ON city.country_id = country.country_id WHERE customer_id = $1'
+
 /**
  * Insert
  */

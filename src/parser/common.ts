@@ -13,6 +13,7 @@ import {
   BinaryOperator,
   TableSpecifier,
   FieldSpecifier,
+  VariableExpression,
 } from "../AST";
 
 export type ParseStatementTerminator<T> = Trim<T> extends ""
@@ -36,6 +37,8 @@ export type ParseIdentifier<T> = T extends ""
   : Tokenize<T> extends [infer Head, infer Tail]
   ? Head extends ""
     ? never
+    : Head extends `$${infer R0}`
+    ? [VariableExpression, Tail]
     : Head extends "null"
     ? [NullLiteral, Tail]
     : Head extends "true"
