@@ -80,11 +80,11 @@ export type ParseJoinClause<
 export type ParseWhereClauseForSelect<T> = Trim<T> extends ""
   ? Merge<{ where: BooleanLiteral<true> } & ParseLimitClause<Trim<T>>>
   : Trim<T> extends `${infer Head}WHERE ${infer Where}`
-  ? ParseExpression<Where> extends [infer Exp, infer R0]
-    ? Exp extends Expression
-      ? Merge<{ where: Merge<Exp> } & ParseLimitClause<R0>>
+    ? ParseExpression<Where> extends [infer Exp, infer R0]
+      ? Exp extends Expression
+        ? Merge<{ where: Merge<Exp> } & ParseLimitClause<R0>>
+        : never
       : never
-    : never
   : Merge<{ where: BooleanLiteral<true> } & ParseLimitClause<Trim<T>>>;
 
 export type ParseLimitClause<

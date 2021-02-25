@@ -118,3 +118,26 @@ export type NQ8 = "SELECT first_name, c.last_name, rentals.rental_date rented FR
 export type NQ9 = "SELECT first_name, c.last_name, rental.rental_dates rented FROM rental INNER JOIN customer AS c ON rental.customer_id = customer.customer_id;"
 
 export type NQ10 = "SELECT first_name, c.last_name, rental.rental_dates rented FROM rental INNER JOIN customers AS c ON rental.customer_id = customer.customer_id;"
+
+// new
+export type NQ11 = "SELECT last_name, first_name FROM customer WHERE first_name = 'Jamie' OR last_names = 'Rice' LIMIT 4 OFFSET 3;"
+
+export type NQ12 = "SELECT customer_id, rental_id, return_date FROM rental WHERE customer_ids IN (1, 2) ORDER BY return_date DESC;"
+
+export type NQ13 = "SELECT customer_id, rental_id, return_date FROM rental WHERE rentals.customer_id NOT IN (1, 2);"
+
+export type NQ14 = "SELECT customer_id, rental_id, return_date FROM rental WHERE customers_id <> 1 AND customers_id <> 2;"
+
+export type NQ15 = "SELECT customer_id, payment_id, amount FROM payment WHERE payments.amount BETWEEN 8 AND 9;"
+
+export type NQ16 = "SELECT customer_id, payment_id, amount FROM payment WHERE amounts NOT BETWEEN 8 AND 9;"
+
+export type NQ17 = "SELECT first_name, last_name FROM customer WHERE first_names LIKE 'Jen%';"
+
+export type NQ18 = "SELECT first_name, last_name FROM customer WHERE first_names NOT LIKE 'Jen%';"
+
+export type NQ19 = "SELECT first_name, last_name FROM customer WHERE customers.first_name ILIKE 'Jen%';"
+
+export type NQ20 = "SELECT first_name, last_name FROM customer WHERE first_names NOT ILIKE 'Jen%';"
+
+export type NQ21 = "SELECT customer_id, rental_id, return_date FROM rental WHERE customer_id <> 1 AND customer_ids <> 2;"

@@ -70,8 +70,8 @@ There you can see...
       - [x] Invalid `ON` target fields
     - [ ] `ORDER BY` clause
       - [ ] Invalid field names
-    - [ ] `WHERE` clause
-      - [ ] Invalid field names
+    - [x] `WHERE` clause
+      - [x] Invalid field names
   - [ ] `INSERT`
   - [ ] `UPDATE`
   - [ ] `DELETE`

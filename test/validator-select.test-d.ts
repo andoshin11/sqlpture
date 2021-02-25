@@ -77,13 +77,27 @@ expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.Q32>>>(true)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ1>>>(false)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ2>>>(false)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ3>>>(false)
-expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ4>>>(false) // FIXME
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ4>>>(false)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ5>>>(false)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ6>>>(false)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ7>>>(false)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ8>>>(false)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ9>>>(false)
 expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ10>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ11>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ12>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ13>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ14>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ15>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ16>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ17>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ18>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ19>>>(false)
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ20>>>(false)
+// @ts-expect-error
+expectType<ValidateSelectStatement<fixtures.DB, Parse<fixtures.NQ21>>>(false) // FIXME
+
+type T7 = Parse<fixtures.NQ14>['where']
 
 /**
  * ValidateFieldList

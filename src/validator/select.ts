@@ -7,7 +7,7 @@ export type ValidateSelectStatement<
   DB extends Database,
   Node extends SelectStatement
 > = Node extends SelectStatement<infer Fields, infer From, infer Joins, infer Where, infer Limit, infer Offset>
-  ? true extends (ValidateFieldList<DB, Node> & ValidateFromClause<DB, Node> & ValidateJoinClauses<DB, Node>)
+  ? true extends (ValidateFieldList<DB, Node> & ValidateFromClause<DB, Node> & ValidateJoinClauses<DB, Node> & ValidateWhereClause<DB, Node>)
     ? true
     : false
   : false
@@ -145,7 +145,13 @@ export type ValidJoinClauses<
   DB extends Database
 > = { joins: Array<InnerJoinSpecifier<TableSpecifier<Identifier<string & keyof DB['schema']>, any>, any>> }
 
-// TODO: validate identifiers & fields
+export type ValidateWhereClause<
+  DB extends Database,
+  Node extends SelectStatement
+> = Node extends SelectStatement<infer Fields, infer From, infer Joins, infer Where, infer Limit, infer Offset>
+? _CheckExpressionValidity<DB, Node, Where>
+: false
+
 export type ValidWhereClause<
   DB extends Database,
   FieldNames = ExtractAllFieldNames<DB>
