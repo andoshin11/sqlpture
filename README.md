@@ -59,6 +59,7 @@ There you can see...
       - [x] INNER JOIN multiple tables
       - [x] field name from public table
       - [x] field name with table alias prefix
+      - [x] SELF JOIN
 - [ ] Query Validator
   - [ ] `SELECT`
     - [x] Field names

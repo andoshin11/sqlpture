@@ -99,6 +99,8 @@ export type Q31 = "SELECT * FROM rental INNER JOIN customer ON rental.customer_i
 
 export type Q32 = "SELECT first_name, c.last_name surname, c.email FROM customer AS c;"
 
+export type Q33 = "SELECT c.first_name, _c.first_name _first_name , c.last_name, rental.rental_date, rental.return_date, film.title film_title FROM rental INNER JOIN customer AS c ON rental.customer_id = c.customer_id INNER JOIN inventory ON rental.inventory_id = inventory.inventory_id INNER JOIN film ON inventory.film_id = film.film_id INNER JOIN customer _c ON c.customer_id = _c.customer_id ORDER BY rental_date DESC LIMIT 10;"
+
 export type NQ1 = 'SELECT * FROM invalid;'
 
 export type NQ2 = "SELECT * FROM rental INNER JOIN customers ON rental.customer_id = customers.customer_id;"
