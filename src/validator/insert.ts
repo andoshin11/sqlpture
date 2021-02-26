@@ -27,7 +27,7 @@ export type ValidateInsertStatement<
     : false
   : false;
 
-type ValidateFields<
+export type ValidateFields<
   DB extends Database,
   Node extends InsertStatement
 > = Node extends InsertStatement<
@@ -37,11 +37,7 @@ type ValidateFields<
   infer ReturningFields
 >
   ? TableName extends keyof DB["schema"]
-    ? {
-        [K in keyof Fields]: Fields[K] extends keyof DB["schema"][TableName]
-          ? true
-          : false;
-      } extends true[]
+    ? Fields extends Array<keyof DB["schema"][TableName]>
       ? true
       : false
     : false
@@ -81,7 +77,7 @@ type _CheckFieldsMatch<
           ? _CheckFieldsMatch<Tail, _Tail, [...List, true]>
           : _CheckFieldsMatch<Tail, _Tail, [...List, false]>
         : _Head extends StringLiteral<infer _Str>
-        ? Head extends _Str
+        ? _Str extends Head
           ? _CheckFieldsMatch<Tail, _Tail, [...List, true]>
           : _Str extends `${infer YYYY}-${infer MM}-${infer DD} ${infer HH}:${infer mm}:${infer ss}`
           ? Head extends Date
@@ -101,9 +97,11 @@ type _CheckFieldsMatch<
         : _CheckFieldsMatch<Tail, _Tail, [...List, false]>
       : false
     : false
-  : List extends true[]
-  ? true
-  : false;
+  : Values extends [infer _Head, ...infer _Tail] // check if there's any remaining item in Values
+    ? false
+    : List extends true[]
+      ? true
+      : false;
 
 export type ValidateValues<
   DB extends Database,

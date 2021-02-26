@@ -1,6 +1,6 @@
 import { Parse } from "./Parser";
 import { Database } from "./Schema";
-import { ValidateSelectStatement } from "./validator/select";
+import { ValidateSelectStatement, ValidSelectStatement } from "./validator/select";
 import { ValidateInsertStatement } from "./validator/insert";
 
 export type ValidateQuery<
@@ -11,3 +11,5 @@ export type ValidateQuery<
   : true extends ValidateInsertStatement<DB, Parse<T>>
   ? true
   : false;
+
+export type ExperimentalValidQuery<DB extends Database, T extends ValidSelectStatement<DB>> = T
