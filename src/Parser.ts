@@ -18,6 +18,7 @@ import {
 import { IntegerStrings, Trim } from "./Utils";
 import { ParseSelectStatement } from "./parser/select";
 import { ParseInsertStatement } from "./parser/insert";
+import { ParseUpdateStatement } from './parser/update'
 
 export type Parse<T> = ParseStatement<T> extends [infer Statement, infer Rest]
   ? Trim<Rest> extends ";"
@@ -32,32 +33,6 @@ type ParseStatement<T> =
   | ParseInsertStatement<T>
   | ParseUpdateStatement<T>
   | ParseDeleteStatement<T>;
-
-type ParseUpdateStatement<
-  T
-> = T extends `UPDATE ${infer TableName} SET ${infer Fields} WHERE ${infer Where}`
-  ? ParseExpression<Where> extends [infer Exp, string]
-    ? Exp extends Expression
-      ? [
-          UpdateStatement<
-            TableName,
-            ParseAssignmentExpressionList<Fields>,
-            Exp
-          >,
-          ""
-        ]
-      : never
-    : never
-  : T extends `UPDATE ${infer TableName} SET ${infer Fields}`
-  ? [
-      UpdateStatement<
-        TableName,
-        ParseAssignmentExpressionList<Fields>,
-        BooleanLiteral<true>
-      >,
-      ""
-    ]
-  : never;
 
 type ParseDeleteStatement<
   T
@@ -146,37 +121,6 @@ type ParseParenthesizedExpression<
   T
 > = T extends `(${infer Content})${infer Rest}`
   ? [ParseExpression<Content>, Rest]
-  : never;
-
-type ParseAssignmentExpressionList<T> = T extends `${infer Head},${infer Tail}`
-  ? [
-      ParseAssignmentExpression<Trim<Head>>,
-      ...ParseAssignmentExpressionList<Trim<Tail>>
-    ]
-  : T extends `${infer Head} = ${infer Value} ${infer Tail}`
-  ? [
-      AssignmentExpression<
-        Identifier<Trim<Head>>,
-        ParseExpression<Trim<Value>>[0] & Expression
-      >,
-      Tail
-    ]
-  : T extends `${infer Head} = ${infer Value}`
-  ? [
-      AssignmentExpression<
-        Identifier<Trim<Head>>,
-        ParseExpression<Trim<Value>>[0] & Expression
-      >
-    ]
-  : T extends `${infer Head} ${infer Tail}`
-  ? [ParseAssignmentExpression<Trim<Head>>, Tail]
-  : [ParseAssignmentExpression<Trim<T>>];
-
-type ParseAssignmentExpression<T> = T extends `${infer Key} = ${infer Value}`
-  ? AssignmentExpression<
-      Identifier<Key>,
-      ParseExpression<Value>[0] & Expression
-    >
   : never;
 
 type Tokenize<T> = Trim<T> extends `${infer Head} ${infer Tail}`
