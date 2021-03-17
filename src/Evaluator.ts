@@ -34,6 +34,8 @@ type EvaluateStatement<
   ? EvaluateSelectStatement<DB, Node>
   : Node extends InsertStatement
   ? EvaluateInsertStatement<DB, Node>
+  : Node extends UpdateStatement
+  ? EvaluateUpdateStatement<DB, Node>
   : never;
 
 // TBD
@@ -64,24 +66,24 @@ type InsertRow<
 
 type AllReadonly<T> = { readonly [K in keyof T]: T[K] };
 
-type EvaluateUpdateStatement<
-  DB extends Database,
-  Node extends UpdateStatement
-> = Node extends UpdateStatement<
-  infer TableName,
-  infer Assignments,
-  infer Where
->
-  ? {
-      [K in keyof DB]: K extends TableName
-        ? UpdateRows<
-            TableName extends keyof DB ? DB[TableName] : never,
-            Assignments,
-            Where
-          >
-        : DB[K];
-    }
-  : never;
+// type EvaluateUpdateStatement<
+//   DB extends Database,
+//   Node extends UpdateStatement
+// > = Node extends UpdateStatement<
+//   infer TableName,
+//   infer Assignments,
+//   infer Where
+// >
+//   ? {
+//       [K in keyof DB]: K extends TableName
+//         ? UpdateRows<
+//             TableName extends keyof DB ? DB[TableName] : never,
+//             Assignments,
+//             Where
+//           >
+//         : DB[K];
+//     }
+//   : never;
 
 type UpdateRows<
   Table,
@@ -166,6 +168,42 @@ export type EvaluateInsertStatement<
   infer TableName,
   infer Fields,
   infer Values,
+  infer ReturningFields
+>
+  ? ReturningFields extends []
+    ? never
+    : TableName extends keyof DB["schema"]
+    ? ReturningFields extends [FieldSpecifier<Identifier<"*">, Identifier<"*">>]
+      ? Array<DB["schema"][TableName]>
+      : Array<
+          AssembleEntries<
+            {
+              [K in keyof ReturningFields]: ReturningFields[K] extends FieldSpecifier<
+                infer Source,
+                Identifier<infer Alias>
+              >
+                ? Source extends Identifier<infer Name>
+                  ? Name extends keyof DB["schema"][TableName]
+                    ? [
+                        ExtractFieldAlias<ReturningFields[K]>,
+                        DB["schema"][TableName][Name]
+                      ]
+                    : never
+                  : never
+                : never;
+            }
+          >
+        >
+    : never
+  : never;
+
+export type EvaluateUpdateStatement<
+  DB extends Database,
+  Node extends UpdateStatement
+> = Node extends UpdateStatement<
+  infer TableName,
+  infer Values,
+  infer Where,
   infer ReturningFields
 >
   ? ReturningFields extends []
