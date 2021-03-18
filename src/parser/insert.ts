@@ -7,7 +7,11 @@ import {
   StringLiteral,
   VariableExpression,
 } from "../AST";
-import { ParseFieldSpecifierList, ParseReturningClause, ParseValue } from "./common";
+import {
+  ParseFieldSpecifierList,
+  ParseReturningClause,
+  ParseValue,
+} from "./common";
 import { Trim } from "../Utils";
 
 export type ParseInsertStatement<T> = T extends `INSERT INTO ${infer R0}`

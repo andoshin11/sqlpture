@@ -66,44 +66,6 @@ type InsertRow<
 
 type AllReadonly<T> = { readonly [K in keyof T]: T[K] };
 
-// type EvaluateUpdateStatement<
-//   DB extends Database,
-//   Node extends UpdateStatement
-// > = Node extends UpdateStatement<
-//   infer TableName,
-//   infer Assignments,
-//   infer Where
-// >
-//   ? {
-//       [K in keyof DB]: K extends TableName
-//         ? UpdateRows<
-//             TableName extends keyof DB ? DB[TableName] : never,
-//             Assignments,
-//             Where
-//           >
-//         : DB[K];
-//     }
-//   : never;
-
-type UpdateRows<
-  Table,
-  Assignments extends readonly AssignmentExpression[],
-  Where
-> = {
-  [Index in keyof Table]: EvaluateExpression<Table[Index], Where> extends true
-    ? UpdateRow<Table[Index], Assignments>
-    : Table[Index];
-};
-
-type UpdateRow<
-  Row,
-  Assignments extends readonly AssignmentExpression[]
-> = MergeValues<Row, AssembleEntries<ApplyAssignments<Assignments>>>;
-
-type MergeValues<T, U> = Merge<
-  { [K in keyof T]: K extends keyof U ? U[K] : T[K] }
->;
-
 type ApplyAssignments<Assignments extends readonly AssignmentExpression[]> = {
   [K in keyof Assignments]: Assignments[K] extends AssignmentExpression<
     Identifier<infer Key>,
