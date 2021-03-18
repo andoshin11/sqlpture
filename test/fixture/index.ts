@@ -208,3 +208,21 @@ export type NQ204 = "INSERT INTO rental (rental_date, inventory_id, customer_id,
 export type NQ205 = "INSERT INTO rental (rental_date, inventory_id, customer_id, staff_id) VALUES('2021-02-25', 2666, 393, 2), ('2021-02-26', 2666, NULL, 2);"
 
 export type NQ206 = "INSERT INTO rental (rental_date, inventory_id, customer_id, staff_id) VALUES('2021-02-25', 2666, 393, 2) RETURNING rental_date, inventory_ids inventory;"
+
+/**
+ * Insert
+ */
+
+export type NQ300 = "UPDATE customers SET activebool = true;"
+
+export type NQ301 = "UPDATE customer SET activebools = true;"
+
+export type NQ302 = "UPDATE customer SET activebool = 3;"
+
+export type NQ303 = "UPDATE customer SET activebool = true WHERE customer_ids = 1;"
+
+export type NQ304 = "UPDATE customer SET activebool = true WHERE first_name = 'John' AND last_names = 'Smith' RETURNING customer_id AS id, email;"
+
+export type NQ305 = "UPDATE customer SET activebool = true WHERE customer_id = 'hoge';"
+
+export type NQ306 = "UPDATE customer SET activebool = true WHERE customer_id != 'hoge';"
