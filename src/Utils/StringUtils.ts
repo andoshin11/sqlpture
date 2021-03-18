@@ -41,6 +41,12 @@ export type MatchString<
 
 export type Trim<T> = T extends ` ${infer Rest}` ? Trim<Rest> : T;
 
+export type TrimRight<T> = T extends `${infer Rest} ` ? TrimRight<Rest> : T;
+
+export type TrimSemicolon<T> = T extends `${infer Rest};`
+  ? TrimSemicolon<Rest>
+  : T;
+
 type Indents = {
   0: "";
   1: "  ";

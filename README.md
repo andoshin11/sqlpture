@@ -78,7 +78,8 @@ There you can see...
     - [x] `INSERT`
       - [x] Return Data
       - [x] Insert multiple rows
-    - [ ] `UPDATE`
+    - [x] `UPDATE`
+      - [x] Return Data
     - [ ] `DELETE`
 - [ ] Query Validator
   - [ ] `SELECT`
@@ -101,5 +102,9 @@ There you can see...
     - [x] Check values type
     - [x] Insert multiple rows
     - [x] Accept Variable Expression( `$`)
-  - [ ] `UPDATE`
+  - [x] `UPDATE`
+    - [x] Return field names
+    - [x] Set field names
+    - [x] Set field values
+    - [x] Where expression validity
   - [ ] `DELETE`

@@ -135,12 +135,14 @@ export type InsertStatement<
 export type UpdateStatement<
   TableName extends string = string,
   Values extends AssignmentExpression[] = AssignmentExpression[],
-  Where extends Expression = Expression
+  Where extends Expression = Expression,
+  ReturningFields extends FieldSpecifier<any>[] = FieldSpecifier<any>[]
 > = {
   type: "UpdateStatement";
   tableName: TableName;
   values: Values;
   where: Where;
+  returningFields: ReturningFields;
 };
 
 export type DeleteStatement<

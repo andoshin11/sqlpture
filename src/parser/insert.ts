@@ -7,7 +7,11 @@ import {
   StringLiteral,
   VariableExpression,
 } from "../AST";
-import { ParseFieldSpecifierList } from "./common";
+import {
+  ParseFieldSpecifierList,
+  ParseReturningClause,
+  ParseValue,
+} from "./common";
 import { Trim } from "../Utils";
 
 export type ParseInsertStatement<T> = T extends `INSERT INTO ${infer R0}`
@@ -46,23 +50,3 @@ type ParseValuesListClause<
 type ParseValues<T> = T extends `${infer Head},${infer Tail}`
   ? [ParseValue<Head>, ...ParseValues<Tail>]
   : [ParseValue<T>];
-
-type ParseValue<T> = Trim<T> extends `$${infer R0}`
-  ? VariableExpression
-  : Trim<T> extends "NULL"
-  ? NullLiteral
-  : Trim<T> extends "TRUE"
-  ? BooleanLiteral<true>
-  : Trim<T> extends "FALSE"
-  ? BooleanLiteral<false>
-  : Trim<T> extends `'${infer S}'`
-  ? StringLiteral<S>
-  : NumericLiteral;
-
-type ParseReturningClause<
-  T
-> = T extends `${infer R0}RETURNING${infer FieldNames}`
-  ? FieldNames extends `${infer R1};`
-    ? { returningFields: ParseFieldSpecifierList<Trim<R1>> }
-    : { returningFields: ParseFieldSpecifierList<Trim<FieldNames>> }
-  : { returningFields: [] };

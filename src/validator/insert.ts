@@ -98,10 +98,10 @@ type _CheckFieldsMatch<
       : false
     : false
   : Values extends [infer _Head, ...infer _Tail] // check if there's any remaining item in Values
-    ? false
-    : List extends true[]
-      ? true
-      : false;
+  ? false
+  : List extends true[]
+  ? true
+  : false;
 
 export type ValidateValues<
   DB extends Database,

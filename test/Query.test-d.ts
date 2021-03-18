@@ -180,3 +180,15 @@ expectType<T201>(V201)
 type T202 = Query<fixtures.Q202, fixtures.DB>
 const V202: T202 = [{ rental_date: new Date('2005-05-24 22:53:30'), inventory: 367 }]
 expectType<T202>(V202)
+
+type T300 = Query<fixtures.Q300, fixtures.DB>
+
+type T301 = Query<fixtures.Q301, fixtures.DB>
+const V301: T301 = [{ customer_id: 1, store_id: 10, first_name: 'John', last_name: 'Smith', email: 'john.smith@example.com', address_id: 20, activebool: true, create_date: new Date('2005-05-24 22:53:30'), last_update: new Date('2005-05-24 22:53:30'), active: 1 }]
+expectType<T301>(V301)
+
+type T302 = Query<fixtures.Q302, fixtures.DB>
+
+type T303 = Query<fixtures.Q303, fixtures.DB>
+const V303: T303 = [{ id: 1, email: null }]
+expectType<T303>(V303)

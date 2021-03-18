@@ -159,6 +159,30 @@ export type ParseFieldSpecifier<
     : never
   : never;
 
+export type ParseValue<T> = Trim<T> extends `$${infer R0}`
+  ? VariableExpression
+  : Trim<T> extends "NULL"
+  ? NullLiteral
+  : Trim<T> extends "TRUE"
+  ? BooleanLiteral<true>
+  : Trim<T> extends "true"
+  ? BooleanLiteral<true>
+  : Trim<T> extends "FALSE"
+  ? BooleanLiteral<false>
+  : Trim<T> extends "false"
+  ? BooleanLiteral<false>
+  : Trim<T> extends `'${infer S}'`
+  ? StringLiteral<S>
+  : NumericLiteral;
+
+export type ParseReturningClause<
+  T
+> = T extends `${infer R0}RETURNING${infer FieldNames}`
+  ? FieldNames extends `${infer R1};`
+    ? { returningFields: ParseFieldSpecifierList<Trim<R1>> }
+    : { returningFields: ParseFieldSpecifierList<Trim<FieldNames>> }
+  : { returningFields: [] };
+
 export type Tokenize<T> = Trim<T> extends `${infer Head} ${infer Tail}`
   ? [Head, Tail]
   : Trim<T> extends `${infer Head},${infer Tail}`
