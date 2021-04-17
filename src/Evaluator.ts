@@ -216,52 +216,63 @@ type _GetSelectAllFields<
   Normalized extends Record<string, any>[] = []
 > = Fields extends [infer Head, ...infer Tail]
   ? Tail extends FieldSpecifier<any>[]
-    ? Head extends FieldSpecifier<
-        infer Source,
-        Identifier<infer Alias>
-      >
+    ? Head extends FieldSpecifier<infer Source, Identifier<infer Alias>>
       ? Source extends MemberExpression<infer O, infer P>
-        ? P extends '*'
-          ? O extends Schema['from']['alias']
-            ? _GetSelectAllFields<Schema, Tail, [...Normalized, Schema['from']['schema']]>
-            : O extends keyof Schema['joins']
-              ? _GetSelectAllFields<Schema, Tail, [...Normalized, Schema['joins']]>
-              : never
+        ? P extends "*"
+          ? O extends Schema["from"]["alias"]
+            ? _GetSelectAllFields<
+                Schema,
+                Tail,
+                [...Normalized, Schema["from"]["schema"]]
+              >
+            : O extends keyof Schema["joins"]
+            ? _GetSelectAllFields<
+                Schema,
+                Tail,
+                [...Normalized, Schema["joins"]]
+              >
+            : never
           : _GetSelectAllFields<Schema, Tail, Normalized>
         : _GetSelectAllFields<Schema, Tail, Normalized>
       : never
     : Normalized
-  : Normalized
+  : Normalized;
 
 export type ExtractFields<
   DB extends Database,
   Schema extends JoinedSchema<any>,
   Fields extends FieldSpecifier<any>[],
-  SelectAllFields extends Record<string, any>[] = _GetSelectAllFields<Schema, Fields>
-> = Merge<AssembleEntries<
-  {
-    [K in keyof Fields]: Fields[K] extends FieldSpecifier<
-      infer Source,
-      Identifier<infer Alias>
-    >
-      ? Source extends Identifier<infer Name>
-        ? Name extends keyof Schema["public"]
-          ? [ExtractFieldAlias<Fields[K]>, Schema["public"][Name]]
-          : never
-        : Source extends MemberExpression<infer O, infer P>
-        ? O extends keyof Schema["joins"]
-          ? P extends keyof Schema["joins"][O]
-            ? [Alias, Schema["joins"][O][P]]
+  SelectAllFields extends Record<string, any>[] = _GetSelectAllFields<
+    Schema,
+    Fields
+  >
+> = Merge<
+  AssembleEntries<
+    {
+      [K in keyof Fields]: Fields[K] extends FieldSpecifier<
+        infer Source,
+        Identifier<infer Alias>
+      >
+        ? Source extends Identifier<infer Name>
+          ? Name extends keyof Schema["public"]
+            ? [ExtractFieldAlias<Fields[K]>, Schema["public"][Name]]
             : never
-          : O extends Schema["from"]["alias"]
-          ? P extends keyof Schema["from"]["schema"]
-            ? [Alias, Schema["from"]["schema"][P]]
+          : Source extends MemberExpression<infer O, infer P>
+          ? O extends keyof Schema["joins"]
+            ? P extends keyof Schema["joins"][O]
+              ? [Alias, Schema["joins"][O][P]]
+              : never
+            : O extends Schema["from"]["alias"]
+            ? P extends keyof Schema["from"]["schema"]
+              ? [Alias, Schema["from"]["schema"][P]]
+              : never
             : never
           : never
-        : never
-      : never;
-  }
-> & UnionToIntersection<TupleToUnion<SelectAllFields>>>;
+        : never;
+    }
+  > &
+    UnionToIntersection<TupleToUnion<SelectAllFields>>
+>;
 
 type EvaluateExpression<Row, Exp> =
   | EvaluateLogicalExpression<Row, Exp>

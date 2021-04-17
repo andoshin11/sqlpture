@@ -8,7 +8,7 @@ export type Database = {
 export type JoinedSchema<DB extends Database> = {
   public: object;
   joins: Record<string, UnionizeValue<DB["schema"]>>;
-  joinAliases: any
+  joinAliases: any;
   from: {
     source: string;
     alias: string;
