@@ -81,7 +81,9 @@ export type ValidateFieldList<
               ? true
               : false
             : Source extends MemberExpression<infer O, infer P>
-            ? O extends _JoinedSchema["from"]["alias"] // if true, search from from table
+              ? P extends "*"
+              ? true
+            : O extends _JoinedSchema["from"]["alias"] // if true, search from from table
               ? P extends keyof _JoinedSchema["from"]["schema"]
                 ? true
                 : false

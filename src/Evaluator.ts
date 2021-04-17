@@ -25,6 +25,7 @@ import {
   UnionToIntersection,
   AssembleEntries,
   ToJoinedSchema,
+  TupleToUnion,
 } from "./Utils";
 
 type EvaluateStatement<
@@ -118,7 +119,7 @@ export type EvaluateSelectStatement<
     ? Source extends keyof DB["schema"]
       ? Fields extends [FieldSpecifier<Identifier<"*">, Identifier<"*">>]
         ? Array<ToJoinedSchema<DB, From, Joins>["public"]>
-        : Array<ExtractFields<ToJoinedSchema<DB, From, Joins>, Fields>>
+        : Array<ExtractFields<DB, ToJoinedSchema<DB, From, Joins>, Fields>>
       : never
     : never
   : never;
@@ -208,10 +209,36 @@ export type FilterUndefined<T> = T extends Readonly<[infer Head, ...infer Tail]>
     : [Head, ...FilterUndefined<Tail>]
   : [];
 
-export type ExtractFields<
+// Get `a.*` type of fields
+type _GetSelectAllFields<
   Schema extends JoinedSchema<any>,
-  Fields extends FieldSpecifier<any>[]
-> = AssembleEntries<
+  Fields extends FieldSpecifier<any>[],
+  Normalized extends Record<string, any>[] = []
+> = Fields extends [infer Head, ...infer Tail]
+  ? Tail extends FieldSpecifier<any>[]
+    ? Head extends FieldSpecifier<
+        infer Source,
+        Identifier<infer Alias>
+      >
+      ? Source extends MemberExpression<infer O, infer P>
+        ? P extends '*'
+          ? O extends Schema['from']['alias']
+            ? _GetSelectAllFields<Schema, Tail, [...Normalized, Schema['from']['schema']]>
+            : O extends keyof Schema['joins']
+              ? _GetSelectAllFields<Schema, Tail, [...Normalized, Schema['joins']]>
+              : never
+          : _GetSelectAllFields<Schema, Tail, Normalized>
+        : _GetSelectAllFields<Schema, Tail, Normalized>
+      : never
+    : Normalized
+  : Normalized
+
+export type ExtractFields<
+  DB extends Database,
+  Schema extends JoinedSchema<any>,
+  Fields extends FieldSpecifier<any>[],
+  SelectAllFields extends Record<string, any>[] = _GetSelectAllFields<Schema, Fields>
+> = Merge<AssembleEntries<
   {
     [K in keyof Fields]: Fields[K] extends FieldSpecifier<
       infer Source,
@@ -234,7 +261,7 @@ export type ExtractFields<
         : never
       : never;
   }
->;
+> & UnionToIntersection<TupleToUnion<SelectAllFields>>>;
 
 type EvaluateExpression<Row, Exp> =
   | EvaluateLogicalExpression<Row, Exp>

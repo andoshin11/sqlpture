@@ -43,6 +43,18 @@ export type JoinsMap<
   }
 >;
 
+export type JoinAliasesMap<
+  Joins extends JoinSpecifier[]
+> = AssembleEntries<
+  {
+    [K in keyof Joins]: Joins[K] extends InnerJoinSpecifier<
+      TableSpecifier<Identifier<infer JoinSource>, Identifier<infer JoinAlias>>
+    >
+      ? [JoinAlias, JoinSource]
+      : never;
+  }
+>;
+
 export type ToJoinedSchema<
   DB extends Database,
   From extends TableSpecifier,
@@ -58,6 +70,7 @@ export type ToJoinedSchema<
           UnionToIntersection<UnionizeValue<JoinsMap<DB, Joins>>>
         >;
         joins: JoinsMap<DB, Joins>;
+        joinAliases: JoinAliasesMap<Joins>
         from: {
           source: Source;
           alias: Alias;
